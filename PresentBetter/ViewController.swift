@@ -1,14 +1,17 @@
 import AVFoundation
-import Vision
+import CoreML
 import UIKit
+import Vision
 
 class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
-
+    @IBOutlet var imageView: UIImageView!
+    @IBOutlet var faceImageView: UIImageView!
+    @IBOutlet var lblEmotionClass: UILabel!
+    
     var captureSession: AVCaptureSession!
     var camera: AVCaptureDevice!
     var cameraInput: AVCaptureInput!
     var videoOutput: AVCaptureVideoDataOutput!
-    
     var sampleBufferQueue: DispatchQueue!
     
     var sequenceHandler: VNSequenceRequestHandler!
@@ -20,9 +23,6 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     var captureImage: UIImage?
     
     var roundRectLayer: CAShapeLayer!
-    
-    @IBOutlet var imageView: UIImageView!
-    @IBOutlet var faceImageView: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -158,8 +158,9 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                 return
             }
             if let faceImageRef = self.getFaceImage(originalImage: captureImage, faceBox: imageBoundingBoxNotTranslated) {
-                let faceImage = UIImage(cgImage: faceImageRef)
-                self.faceImageView.image = faceImage
+                if let emotionPrediction = MLDataProvider.predictEmotion(image: faceImageRef) {
+                    self.lblEmotionClass.text = MLProvider.EmotionTextMap[emotionPrediction]
+                }
             }
         }
     }
@@ -169,13 +170,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             return
         }
         
-        let width = CVPixelBufferGetWidth(imageBuffer)
-        let height = CVPixelBufferGetHeight(imageBuffer)
-        
-        captureWidth = width
-        captureHeight = height
-        
-        let contextRect = CGRect(x: 0, y: 0, width: width, height: height)
+        captureWidth = CVPixelBufferGetWidth(imageBuffer)
+        captureHeight = CVPixelBufferGetHeight(imageBuffer)
         
         let ciImage = CIImage(cvPixelBuffer: imageBuffer)
         let ciContext = CIContext(options: nil)
@@ -183,19 +179,11 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             return
         }
         
-        guard let cgContext = CGContext(data: nil, width: width, height: height, bitsPerComponent: 8, bytesPerRow: 0, space: CGColorSpaceCreateDeviceGray(), bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.none.rawValue).rawValue) else {
-            return
-        }
-        cgContext.draw(cgImage, in: contextRect)
-        
-        guard let imageRef = cgContext.makeImage() else {
-            return
-        }
-        captureImage = UIImage(cgImage: imageRef, scale: 1, orientation: .leftMirrored)
+        captureImage = UIImage(cgImage: cgImage, scale: 1, orientation: .leftMirrored)
         
         let detectFaceRequest = VNDetectFaceRectanglesRequest(completionHandler: detectedFace)
         do {
-            try sequenceHandler.perform([detectFaceRequest], on: imageRef, orientation: .leftMirrored)
+            try sequenceHandler.perform([detectFaceRequest], on: imageBuffer, orientation: .leftMirrored)
         } catch {
             print(error.localizedDescription)
         }

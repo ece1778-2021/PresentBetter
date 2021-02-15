@@ -26,6 +26,12 @@
                                     <constraint firstAttribute="height" constant="48" id="pSZ-WB-Kfb"/>
                                 </constraints>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="???" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aeg-fy-jBS">
+                                <rect key="frame" x="193.5" y="807.5" width="27.5" height="21"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <color key="textColor" systemColor="systemRedColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -33,6 +39,8 @@
                             <constraint firstItem="lfa-b8-Mca" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Eae-Um-hcq"/>
                             <constraint firstAttribute="bottom" secondItem="lfa-b8-Mca" secondAttribute="bottom" id="QjU-Lk-lH4"/>
                             <constraint firstItem="lfa-b8-Mca" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="bFF-BG-NSZ"/>
+                            <constraint firstItem="aeg-fy-jBS" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="cAO-Pd-L9F"/>
+                            <constraint firstItem="Ksy-gd-Ofp" firstAttribute="centerY" secondItem="aeg-fy-jBS" secondAttribute="centerY" id="hC8-ks-QNa"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="lfa-b8-Mca" secondAttribute="trailing" id="pyu-KQ-CL6"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Ksy-gd-Ofp" secondAttribute="bottom" constant="20" id="q9S-ZX-QQd"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Ksy-gd-Ofp" secondAttribute="trailing" constant="20" id="vYS-EL-3eJ"/>
@@ -41,6 +49,7 @@
                     <connections>
                         <outlet property="faceImageView" destination="Ksy-gd-Ofp" id="qSF-8i-CwK"/>
                         <outlet property="imageView" destination="lfa-b8-Mca" id="AQM-Ws-e6d"/>
+                        <outlet property="lblEmotionClass" destination="aeg-fy-jBS" id="upw-6r-OuV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -51,6 +60,9 @@
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemRedColor">
+            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
