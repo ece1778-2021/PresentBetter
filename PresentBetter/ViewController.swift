@@ -1,4 +1,5 @@
 import AVFoundation
+import Vision
 import UIKit
 
 class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
@@ -10,14 +11,30 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     
     var sampleBufferQueue: DispatchQueue!
     
+    var sequenceHandler: VNSequenceRequestHandler!
+    
     var accessSuccessful = false
     var configSuccessful = false
+    
+    var captureWidth = 0, captureHeight = 0
+    var captureImage: UIImage?
+    
+    var roundRectLayer: CAShapeLayer!
+    
     @IBOutlet var imageView: UIImageView!
+    @IBOutlet var faceImageView: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         let semaphore = DispatchSemaphore(value: 0)
+        sequenceHandler = VNSequenceRequestHandler()
+        roundRectLayer = CAShapeLayer()
+        roundRectLayer.fillColor = UIColor.clear.cgColor
+        roundRectLayer.lineWidth = 2.0
+        roundRectLayer.strokeColor = UIColor.red.cgColor
+        
+        imageView.layer.addSublayer(roundRectLayer)
         
         switch AVCaptureDevice.authorizationStatus(for: .video) {
         case .authorized:
@@ -70,7 +87,6 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         captureSession.addInput(cameraInput)
         
         videoOutput = AVCaptureVideoDataOutput()
-        //videoOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_444YpCbCr8]
         videoOutput.alwaysDiscardsLateVideoFrames = true
         
         sampleBufferQueue = DispatchQueue.global(qos: .userInteractive)
@@ -89,35 +105,75 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         configSuccessful = true
     }
 
+    func getFaceImage(originalImage: UIImage, faceBox: CGRect) -> CGImage? {
+        let transform = CGAffineTransform(rotationAngle: .pi / 2).translatedBy(x: 0, y: -originalImage.size.height)
+        
+        guard let cgImage = originalImage.cgImage?.cropping(to: faceBox.applying(transform)) else {
+            return nil
+        }
+        let width = cgImage.width
+        let height = cgImage.height
+        
+        guard let cgContext = CGContext(data: nil, width: width, height: height, bitsPerComponent: 8, bytesPerRow: 0, space: CGColorSpaceCreateDeviceGray(), bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.none.rawValue).rawValue) else {
+            return nil
+        }
+        cgContext.rotate(by: -.pi / 2)
+        cgContext.translateBy(x: CGFloat(-height), y: 0)
+        cgContext.draw(cgImage, in: CGRect(x: 0, y: 0, width: width, height: height))
+        
+        return cgContext.makeImage()
+    }
+    
+    func detectedFace(request: VNRequest, error: Error?) {
+        guard let results = request.results as? [VNFaceObservation] else {
+            return
+        }
+        guard let result = results.first else {
+            return
+        }
+        
+        DispatchQueue.main.async {
+            let width = Int(self.view.frame.width)
+            let height = Int(self.view.frame.width * (CGFloat(self.captureWidth) / CGFloat(self.captureHeight)))
+            
+            let transform = CGAffineTransform(scaleX: 1, y: -1).translatedBy(x: 0, y: -self.view.frame.height)
+            let translate = CGAffineTransform(translationX: 0, y: -(self.view.frame.height - CGFloat(height)) / 2)
+            
+            var imageBoundingBox = VNImageRectForNormalizedRect(result.boundingBox, width, height)
+                .applying(transform)
+                .applying(translate)
+            
+            if imageBoundingBox.width > imageBoundingBox.height {
+                imageBoundingBox = CGRect(x: imageBoundingBox.origin.x + (imageBoundingBox.width - imageBoundingBox.height) / 2, y: imageBoundingBox.origin.y, width: imageBoundingBox.height, height: imageBoundingBox.height)
+            } else if imageBoundingBox.width < imageBoundingBox.height {
+                imageBoundingBox = CGRect(x: imageBoundingBox.origin.x, y: imageBoundingBox.origin.y + (imageBoundingBox.height - imageBoundingBox.width) / 2, width: imageBoundingBox.width, height: imageBoundingBox.width)
+            }
+            
+            let path = UIBezierPath(roundedRect: imageBoundingBox, cornerRadius: 0)
+            self.roundRectLayer.path = path.cgPath
+            
+            let imageBoundingBoxNotTranslated = VNImageRectForNormalizedRect(result.boundingBox, self.captureHeight, self.captureWidth)
+            
+            guard let captureImage = self.captureImage else {
+                return
+            }
+            if let faceImageRef = self.getFaceImage(originalImage: captureImage, faceBox: imageBoundingBoxNotTranslated) {
+                let faceImage = UIImage(cgImage: faceImageRef)
+                self.faceImageView.image = faceImage
+            }
+        }
+    }
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
             return
         }
         
-        /*
-        CVPixelBufferLockBaseAddress(imageBuffer, CVPixelBufferLockFlags(rawValue: 0))
-        let yPlaneBufferAddress = CVPixelBufferGetBaseAddressOfPlane(imageBuffer, 0)
-        
         let width = CVPixelBufferGetWidth(imageBuffer)
         let height = CVPixelBufferGetHeight(imageBuffer)
-        let bytesPerRow = CVPixelBufferGetBytesPerRowOfPlane(imageBuffer, 0)
         
-        let data = NSData(bytes: yPlaneBufferAddress, length: width * height)
-        let colorSpace = CGColorSpaceCreateDeviceGray()
-        guard let dataProvider = CGDataProvider(data: data) else {
-            return
-        }
-        
-        guard let imageRef = CGImage(width: width, height: height, bitsPerComponent: 8, bitsPerPixel: 8, bytesPerRow: bytesPerRow, space: colorSpace, bitmapInfo: .byteOrder32Little, provider: dataProvider, decode: nil, shouldInterpolate: false, intent: .defaultIntent) else {
-            return
-        }
-        let image = UIImage(cgImage: imageRef)
-        CVPixelBufferUnlockBaseAddress(imageBuffer, CVPixelBufferLockFlags(rawValue: 0))
-        */
-        
-        let width = CVPixelBufferGetWidth(imageBuffer)
-        let height = CVPixelBufferGetHeight(imageBuffer)
+        captureWidth = width
+        captureHeight = height
         
         let contextRect = CGRect(x: 0, y: 0, width: width, height: height)
         
@@ -135,11 +191,18 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         guard let imageRef = cgContext.makeImage() else {
             return
         }
-        let image = UIImage(cgImage: imageRef, scale: 1, orientation: .right)
+        captureImage = UIImage(cgImage: imageRef, scale: 1, orientation: .leftMirrored)
+        
+        let detectFaceRequest = VNDetectFaceRectanglesRequest(completionHandler: detectedFace)
+        do {
+            try sequenceHandler.perform([detectFaceRequest], on: imageRef, orientation: .leftMirrored)
+        } catch {
+            print(error.localizedDescription)
+        }
         
         DispatchQueue.main.async {
             UIView.performWithoutAnimation {
-                self.imageView.image = image
+                self.imageView.image = self.captureImage
             }
         }
     }
