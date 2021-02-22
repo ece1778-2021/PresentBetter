@@ -75,6 +75,7 @@ class MLProvider {
             else {
                 return nil
             }
+            //print(onehotMax)
             return EmotionClassesMap[emotionClassRaw]
         } catch {
             print("Error running model: \(error.localizedDescription)")

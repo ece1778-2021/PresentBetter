@@ -3,10 +3,14 @@ import CoreML
 import UIKit
 import Vision
 
-class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
+enum PresentationState {
+    case preparing
+    case presenting
+}
+
+class PresentationViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
     @IBOutlet var imageView: UIImageView!
-    @IBOutlet var faceImageView: UIImageView!
-    @IBOutlet var lblEmotionClass: UILabel!
+    @IBOutlet var lblCountdown: UILabel!
     
     var captureSession: AVCaptureSession!
     var camera: AVCaptureDevice!
@@ -24,8 +28,13 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     
     var roundRectLayer: CAShapeLayer!
     
+    var state: PresentationState = .preparing
+    var countdown = 5, smiledInSpan = false, totalSmiles = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationController?.setNavigationBarHidden(true, animated: false)
         
         let semaphore = DispatchSemaphore(value: 0)
         sequenceHandler = VNSequenceRequestHandler()
@@ -56,6 +65,23 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         
         DispatchQueue.main.async {
             self.configureCaptureSession()
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        countdown = 5
+        smiledInSpan = false
+        totalSmiles = 0
+        lblCountdown.text = ""
+        state = .preparing
+        
+        DispatchQueue.main.async {
+            if self.configSuccessful {
+                self.lblCountdown.text = "\(self.countdown)"
+                let _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: self.prepareCountdown)
+            } else {
+                self.lblCountdown.text = "Camera error!"
+            }
         }
     }
     
@@ -159,7 +185,9 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             }
             if let faceImageRef = self.getFaceImage(originalImage: captureImage, faceBox: imageBoundingBoxNotTranslated) {
                 if let emotionPrediction = MLDataProvider.predictEmotion(image: faceImageRef) {
-                    self.lblEmotionClass.text = MLProvider.EmotionTextMap[emotionPrediction]
+                    if emotionPrediction == .Happy {
+                        self.smiledInSpan = true
+                    }
                 }
             }
         }
@@ -181,11 +209,13 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         
         captureImage = UIImage(cgImage: cgImage, scale: 1, orientation: .leftMirrored)
         
-        let detectFaceRequest = VNDetectFaceRectanglesRequest(completionHandler: detectedFace)
-        do {
-            try sequenceHandler.perform([detectFaceRequest], on: imageBuffer, orientation: .leftMirrored)
-        } catch {
-            print(error.localizedDescription)
+        if state == .presenting {
+            let detectFaceRequest = VNDetectFaceRectanglesRequest(completionHandler: detectedFace)
+            do {
+                try sequenceHandler.perform([detectFaceRequest], on: imageBuffer, orientation: .leftMirrored)
+            } catch {
+                print(error.localizedDescription)
+            }
         }
         
         DispatchQueue.main.async {
@@ -195,5 +225,45 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         }
     }
     
+}
+
+extension PresentationViewController {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "forwardToFeedback" {
+            let feedbackView = segue.destination as! FeedbackViewController
+            feedbackView.totalSmiles = totalSmiles
+        }
+    }
+    
+    func prepareCountdown(timer: Timer) {
+        countdown -= 1
+        lblCountdown.text = "\(countdown)"
+        
+        if countdown == 0 {
+            timer.invalidate()
+            
+            countdown = 30
+            state = .presenting
+            lblCountdown.text = String(format: "00:%02d", countdown / 2)
+            let _ = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: presentationCountdown)
+        }
+    }
+    
+    func presentationCountdown(timer: Timer) {
+        countdown -= 1
+        if countdown % 2 == 0 {
+            lblCountdown.text = String(format: "00:%02d", countdown / 2)
+        }
+        
+        if smiledInSpan {
+            smiledInSpan = false
+            totalSmiles += 1
+        }
+        
+        if countdown == 0 {
+            timer.invalidate()
+            performSegue(withIdentifier: "forwardToFeedback", sender: self)
+        }
+    }
 }
 
