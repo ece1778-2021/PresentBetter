@@ -111,12 +111,17 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hLL-ji-njX">
+                                <rect key="frame" x="186.5" y="392" width="41" height="30"/>
+                                <state key="normal" title="Home"/>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="yhW-gL-PIV"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="yhW-gL-PIV" firstAttribute="trailing" secondItem="20i-Aa-5xr" secondAttribute="trailing" constant="30" id="0Jy-iC-qdL"/>
                             <constraint firstItem="y8s-P9-Cl5" firstAttribute="leading" secondItem="yhW-gL-PIV" secondAttribute="leading" constant="30" id="2Xr-Am-EVp"/>
+                            <constraint firstItem="hLL-ji-njX" firstAttribute="top" secondItem="L1R-Ha-KFk" secondAttribute="bottom" constant="15" id="4fI-3t-f3Q"/>
                             <constraint firstItem="L1R-Ha-KFk" firstAttribute="centerX" secondItem="C2o-TG-w0f" secondAttribute="centerX" id="7Ej-sq-goY"/>
                             <constraint firstItem="DHD-37-35Y" firstAttribute="top" secondItem="3t3-5K-AKo" secondAttribute="bottom" constant="15" id="CFg-1W-N88"/>
                             <constraint firstItem="3t3-5K-AKo" firstAttribute="top" secondItem="eYD-Pd-5Bl" secondAttribute="bottom" constant="30" id="Eoo-I2-JBD"/>
@@ -126,6 +131,7 @@
                             <constraint firstItem="yhW-gL-PIV" firstAttribute="trailing" secondItem="nWT-VG-vfW" secondAttribute="trailing" constant="30" id="UCs-l5-7Hj"/>
                             <constraint firstItem="3t3-5K-AKo" firstAttribute="leading" secondItem="yhW-gL-PIV" secondAttribute="leading" constant="30" id="VTb-yD-hPB"/>
                             <constraint firstItem="DHD-37-35Y" firstAttribute="leading" secondItem="yhW-gL-PIV" secondAttribute="leading" constant="30" id="VaO-FI-OIe"/>
+                            <constraint firstItem="hLL-ji-njX" firstAttribute="centerX" secondItem="C2o-TG-w0f" secondAttribute="centerX" id="Z38-5h-Zdx"/>
                             <constraint firstItem="yhW-gL-PIV" firstAttribute="trailing" secondItem="gXr-8g-EgS" secondAttribute="trailing" constant="30" id="ZGE-0E-vOh"/>
                             <constraint firstItem="eYD-Pd-5Bl" firstAttribute="leading" secondItem="yhW-gL-PIV" secondAttribute="leading" constant="30" id="b1N-m2-rki"/>
                             <constraint firstItem="eYD-Pd-5Bl" firstAttribute="top" secondItem="yhW-gL-PIV" secondAttribute="top" constant="30" id="hLw-JD-9ss"/>
