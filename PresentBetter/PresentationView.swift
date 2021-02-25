@@ -1,3 +1,4 @@
+import ARKit
 import AVFoundation
 import CoreML
 import UIKit
@@ -8,10 +9,12 @@ enum PresentationState {
     case presenting
 }
 
-class PresentationViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
+class PresentationViewController: UIViewController {
     @IBOutlet var imageView: UIImageView!
+    @IBOutlet var sceneView: ARSCNView!
     @IBOutlet var lblCountdown: UILabel!
     
+    // AVCaptureSession objects
     var captureSession: AVCaptureSession!
     var camera: AVCaptureDevice!
     var cameraInput: AVCaptureInput!
@@ -20,33 +23,107 @@ class PresentationViewController: UIViewController, AVCaptureVideoDataOutputSamp
     
     var sequenceHandler: VNSequenceRequestHandler!
     
+    // AR parameters
+    var supportsDepthCamera = false
+    var lastARUpdateFrameTime: Date?    // Stores the last time ARSession updates its frame
+    var tryStartPresentation = false
+    
+    // Indicates if AVCaptureSession configuration is successful
     var accessSuccessful = false
     var configSuccessful = false
     
+    // Stores the width and height of captured CVPixelBuffer, and the UIImage representation of it
     var captureWidth = 0, captureHeight = 0
     var captureImage: UIImage?
     
     var roundRectLayer: CAShapeLayer!
     
+    // Presentation parameters
     var state: PresentationState = .preparing
     var countdown = 5
     var smiledInSpan = false, totalSmiles = 0
     var leftShoulderAngles = [CGFloat](), rightShoulderAngles = [CGFloat]()
     var handMovedInSpan = false, totalHandMoves = 0
+    var focusDetected = 0, lostFocusDetected = 0, totalLooks = 0
+    
+    // Performance metrics: Number of frames processed during a session
+    var frames = 0
+    
+    // MARK: - View lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationController?.setNavigationBarHidden(true, animated: false)
         
-        let semaphore = DispatchSemaphore(value: 0)
+        supportsDepthCamera = ARFaceTrackingConfiguration.isSupported
         sequenceHandler = VNSequenceRequestHandler()
         roundRectLayer = CAShapeLayer()
         roundRectLayer.fillColor = UIColor.clear.cgColor
         roundRectLayer.lineWidth = 2.0
         roundRectLayer.strokeColor = UIColor.red.cgColor
         
-        imageView.layer.addSublayer(roundRectLayer)
+        if supportsDepthCamera {
+            sceneView.layer.addSublayer(roundRectLayer)
+            sceneView.isHidden = false
+            imageView.isHidden = true
+            initializeARScene()
+        } else {
+            // Fallback to traditional AVCaptureSession if the device has no TrueDepth camera.
+            imageView.layer.addSublayer(roundRectLayer)
+            sceneView.isHidden = true
+            imageView.isHidden = false
+            initializeAVCapture()
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        resetPresentationCountdown()
+        DispatchQueue.main.async {
+            if self.supportsDepthCamera {
+                self.tryStartPresentation = true
+                self.startARSession()
+            } else {
+                // Fallback to traditional AVCaptureSession if the device has no TrueDepth camera.
+                if self.configSuccessful {
+                    self.captureSession.startRunning()
+                    self.startPresentationCountdown()
+                } else {
+                    self.lblCountdown.text = "Camera error!"
+                }
+            }
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if supportsDepthCamera {
+            sceneView.session.pause()
+        } else {
+            // Fallback to traditional AVCaptureSession if the device has no TrueDepth camera.
+            captureSession.stopRunning()
+        }
+    }
+    
+    // MARK: - Camera capture session initialization
+    
+    func initializeARScene() {
+        sceneView.delegate = self
+        sceneView.session.delegate = self
+        sceneView.preferredFramesPerSecond = 15
+    }
+    
+    func startARSession() {
+        let config = ARFaceTrackingConfiguration()
+        config.isLightEstimationEnabled = true
+        sceneView.session.run(config, options: [.resetTracking, .removeExistingAnchors])
+    }
+    
+    func initializeAVCapture() {
+        let semaphore = DispatchSemaphore(value: 0)
         
         switch AVCaptureDevice.authorizationStatus(for: .video) {
         case .authorized:
@@ -69,35 +146,6 @@ class PresentationViewController: UIViewController, AVCaptureVideoDataOutputSamp
         DispatchQueue.main.async {
             self.configureCaptureSession()
         }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        countdown = 5
-        smiledInSpan = false
-        totalSmiles = 0
-        handMovedInSpan = false
-        totalHandMoves = 0
-        leftShoulderAngles.removeAll()
-        leftShoulderAngles.removeAll()
-        state = .preparing
-        
-        DispatchQueue.main.async {
-            if self.configSuccessful {
-                self.captureSession.startRunning()
-                self.lblCountdown.text = "\(self.countdown)"
-                let _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: self.prepareCountdown)
-            } else {
-                self.lblCountdown.text = "Camera error!"
-            }
-        }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        captureSession.stopRunning()
     }
     
     func configureCaptureSession() {
@@ -145,6 +193,8 @@ class PresentationViewController: UIViewController, AVCaptureVideoDataOutputSamp
         configSuccessful = true
     }
 
+    // MARK: - Facial expression detection
+    
     func getFaceImage(originalImage: UIImage, faceBox: CGRect) -> CGImage? {
         let transform = CGAffineTransform(rotationAngle: .pi / 2).translatedBy(x: 0, y: -originalImage.size.height)
         
@@ -176,23 +226,19 @@ class PresentationViewController: UIViewController, AVCaptureVideoDataOutputSamp
             let width = Int(self.view.frame.width)
             let height = Int(self.view.frame.width * (CGFloat(self.captureWidth) / CGFloat(self.captureHeight)))
             
-            let transform = CGAffineTransform(scaleX: 1, y: -1).translatedBy(x: 0, y: -self.view.frame.height)
-            let translate = CGAffineTransform(translationX: 0, y: -(self.view.frame.height - CGFloat(height)) / 2)
-            
-            var imageBoundingBox = VNImageRectForNormalizedRect(result.boundingBox, width, height)
-                .applying(transform)
-                .applying(translate)
-            
-            if imageBoundingBox.width > imageBoundingBox.height {
-                imageBoundingBox = CGRect(x: imageBoundingBox.origin.x + (imageBoundingBox.width - imageBoundingBox.height) / 2, y: imageBoundingBox.origin.y, width: imageBoundingBox.height, height: imageBoundingBox.height)
-            } else if imageBoundingBox.width < imageBoundingBox.height {
-                imageBoundingBox = CGRect(x: imageBoundingBox.origin.x, y: imageBoundingBox.origin.y + (imageBoundingBox.height - imageBoundingBox.width) / 2, width: imageBoundingBox.width, height: imageBoundingBox.width)
+            var transform: CGAffineTransform
+            if self.supportsDepthCamera {
+                transform = CGAffineTransform(scaleX: -1, y: -1).translatedBy(x: -CGFloat(width), y: -CGFloat(height))
+            } else {
+                transform = CGAffineTransform(scaleX: 1, y: -1).translatedBy(x: 0, y: -CGFloat(height))
             }
+            
+            let imageBoundingBox = VNImageRectForNormalizedRect(result.boundingBox, width, height)
+                .applying(transform)
+            let imageBoundingBoxNotTranslated = VNImageRectForNormalizedRect(result.boundingBox, self.captureHeight, self.captureWidth)
             
             let path = UIBezierPath(roundedRect: imageBoundingBox, cornerRadius: 0)
             self.roundRectLayer.path = path.cgPath
-            
-            let imageBoundingBoxNotTranslated = VNImageRectForNormalizedRect(result.boundingBox, self.captureHeight, self.captureWidth)
             
             guard let captureImage = self.captureImage else {
                 return
@@ -206,6 +252,8 @@ class PresentationViewController: UIViewController, AVCaptureVideoDataOutputSamp
             }
         }
     }
+    
+    // MARK: - Body pose detection
     
     func detectedBodyPose(request: VNRequest, error: Error?) {
         guard let results = request.results as? [VNHumanBodyPoseObservation] else {
@@ -229,7 +277,7 @@ class PresentationViewController: UIViewController, AVCaptureVideoDataOutputSamp
         ]
         
         for (key, _) in keyPoints {
-            if let value = points[key], value.confidence > 0 {
+            if let value = points[key], value.confidence > 0.4 {
                 keyPoints[key] = value.location
             }
         }
@@ -290,14 +338,11 @@ class PresentationViewController: UIViewController, AVCaptureVideoDataOutputSamp
                 handMovedInSpan = true
             }
         }
-        
     }
     
-    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
-            return
-        }
-        
+    // MARK: - Camera capture session
+    
+    func processDetection(_ imageBuffer: CVPixelBuffer) {
         captureWidth = CVPixelBufferGetWidth(imageBuffer)
         captureHeight = CVPixelBufferGetHeight(imageBuffer)
         
@@ -312,6 +357,7 @@ class PresentationViewController: UIViewController, AVCaptureVideoDataOutputSamp
         if state == .presenting {
             let detectFaceRequest = VNDetectFaceRectanglesRequest(completionHandler: detectedFace)
             let detectBodyPoseRequest = VNDetectHumanBodyPoseRequest(completionHandler: detectedBodyPose)
+            frames += 1
             
             do {
                 try sequenceHandler.perform([detectFaceRequest, detectBodyPoseRequest], on: imageBuffer, orientation: .leftMirrored)
@@ -319,14 +365,66 @@ class PresentationViewController: UIViewController, AVCaptureVideoDataOutputSamp
                 print(error.localizedDescription)
             }
         }
+    }
+}
+
+extension PresentationViewController: ARSCNViewDelegate {
+    func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
+        guard let faceAnchor = anchor as? ARFaceAnchor else {
+            return
+        }
         
+        if state == .presenting {
+            if faceAnchor.lookAtPoint.x < -0.002 || faceAnchor.lookAtPoint.x > 0.14 || faceAnchor.lookAtPoint.y > -0.004 || faceAnchor.lookAtPoint.y < -0.112 {
+                lostFocusDetected += 1
+            } else {
+                focusDetected += 1
+            }
+        }
+    }
+}
+
+extension PresentationViewController: ARSessionDelegate {
+    func session(_ session: ARSession, didUpdate frame: ARFrame) {
+        if tryStartPresentation == true {
+            tryStartPresentation = false
+            startPresentationCountdown()
+        }
+        
+        var updateInterval: Double
+        if let lastARUpdateFrameTime = self.lastARUpdateFrameTime {
+            updateInterval = Date().timeIntervalSince(lastARUpdateFrameTime)
+        } else {
+            updateInterval = 1 / 17
+        }
+        
+        DispatchQueue.main.async {
+            if updateInterval >= 1 / 17 {
+                self.lastARUpdateFrameTime = Date()
+                self.processDetection(frame.capturedImage)
+            }
+        }
+    }
+    
+    func session(_ session: ARSession, didFailWithError error: Error) {
+        print("Cannot start ARKit: \(error.localizedDescription)")
+        lblCountdown.text = "Camera error!"
+    }
+}
+
+extension PresentationViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
+    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+            return
+        }
+        
+        processDetection(imageBuffer)
         DispatchQueue.main.async {
             UIView.performWithoutAnimation {
                 self.imageView.image = self.captureImage
             }
         }
     }
-    
 }
 
 extension PresentationViewController {
@@ -343,7 +441,28 @@ extension PresentationViewController {
             let feedbackView = segue.destination as! FeedbackViewController
             feedbackView.totalSmiles = totalSmiles
             feedbackView.totalHandMoves = totalHandMoves
+            feedbackView.totalLooks = totalLooks
         }
+    }
+    
+    func resetPresentationCountdown() {
+        frames = 0
+        countdown = 5
+        smiledInSpan = false
+        totalSmiles = 0
+        handMovedInSpan = false
+        totalHandMoves = 0
+        focusDetected = 0
+        lostFocusDetected = 0
+        totalLooks = 0
+        leftShoulderAngles.removeAll()
+        leftShoulderAngles.removeAll()
+        state = .preparing
+    }
+    
+    func startPresentationCountdown() {
+        lblCountdown.text = "\(self.countdown)"
+        let _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: prepareCountdown)
     }
     
     func prepareCountdown(timer: Timer) {
@@ -375,6 +494,12 @@ extension PresentationViewController {
             handMovedInSpan = false
             totalHandMoves += 1
         }
+        
+        if focusDetected > lostFocusDetected {
+            totalLooks += 1
+        }
+        focusDetected = 0
+        lostFocusDetected = 0
         
         if countdown == 0 {
             timer.invalidate()
