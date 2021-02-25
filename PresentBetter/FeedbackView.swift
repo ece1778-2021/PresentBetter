@@ -8,7 +8,10 @@ class FeedbackViewController: UIViewController {
     @IBOutlet var lblGesturesFeedback: UILabel!
     @IBOutlet var lblEyeContactScore: UILabel!
     @IBOutlet var lblEyeContactFeedback: UILabel!
-    @IBOutlet var btnTryAgain: UIButton!
+    @IBOutlet var btnHome: UIButton!
+    @IBOutlet var totalScoreView: UIView!
+    @IBOutlet var lblTotalScore: UILabel!
+    @IBOutlet var lblRank: UILabel!
     
     var totalSmiles = 0
     var totalHandMoves = 0
@@ -18,26 +21,34 @@ class FeedbackViewController: UIViewController {
         super.viewDidLoad()
         
         navigationController?.setNavigationBarHidden(true, animated: false)
+        btnHome.layer.cornerRadius = 15.0
         
+        var totalScore = 0, avgScore = 0
         var score = 0, feedback = ""
-        
         (score, feedback) = calculateFacialExpressionScore()
+        totalScore += score
         lblFacialExpressionScore.text = "\(score)%"
         lblFacialExpressionFeedback.text = "Tip: \(feedback)"
         (score, feedback) = calculateGestureScore()
+        totalScore += score
         lblGesturesScore.text = "\(score)%"
         lblGesturesFeedback.text = "Tip: \(feedback)"
         
         if ARFaceTrackingConfiguration.isSupported {
             (score, feedback) = calculateEyeContactScore()
+            totalScore += score
             lblEyeContactScore.text = "\(score)%"
             lblEyeContactFeedback.text = "Tip: \(feedback)"
-            view.addConstraint(NSLayoutConstraint(item: btnTryAgain!, attribute: .top, relatedBy: .equal, toItem: lblEyeContactFeedback, attribute: .bottom, multiplier: 1, constant: 30))
+            view.addConstraint(NSLayoutConstraint(item: totalScoreView!, attribute: .top, relatedBy: .equal, toItem: lblEyeContactFeedback, attribute: .bottom, multiplier: 1, constant: 30))
         } else {
+            totalScore += 100
             lblEyeContactScore.isHidden = true
             lblEyeContactFeedback.isHidden = true
-            view.addConstraint(NSLayoutConstraint(item: btnTryAgain!, attribute: .top, relatedBy: .equal, toItem: lblGesturesFeedback, attribute: .bottom, multiplier: 1, constant: 30))
+            view.addConstraint(NSLayoutConstraint(item: totalScoreView!, attribute: .top, relatedBy: .equal, toItem: lblGesturesFeedback, attribute: .bottom, multiplier: 1, constant: 30))
         }
+        
+        avgScore = totalScore / 3
+        lblTotalScore.text = "\(avgScore)%"
     }
     
     @IBAction func btnHomeClicked(_ sender: UIButton) {

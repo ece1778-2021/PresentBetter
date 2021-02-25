@@ -13,6 +13,8 @@ class PresentationViewController: UIViewController {
     @IBOutlet var imageView: UIImageView!
     @IBOutlet var sceneView: ARSCNView!
     @IBOutlet var lblCountdown: UILabel!
+    @IBOutlet var lblPrepareCountdown: UILabel!
+    @IBOutlet var countdownBackgroundView: UIView!
     
     // AVCaptureSession objects
     var captureSession: AVCaptureSession!
@@ -89,7 +91,9 @@ class PresentationViewController: UIViewController {
                 // Fallback to traditional AVCaptureSession if the device has no TrueDepth camera.
                 if self.configSuccessful {
                     self.captureSession.startRunning()
-                    self.startPresentationCountdown()
+                    
+                    PresentationPreparationViewController.showView(self)
+                    NotificationCenter.default.addObserver(self, selector: #selector(self.startPresenting), name: Notification.popoverDismissed, object: nil)
                 } else {
                     self.lblCountdown.text = "Camera error!"
                 }
@@ -109,6 +113,12 @@ class PresentationViewController: UIViewController {
     }
     
     // MARK: - Camera capture session initialization
+    
+    // Alias of startPresentationCountdown
+    @objc func startPresenting() {
+        NotificationCenter.default.removeObserver(self)
+        startPresentationCountdown()
+    }
     
     func initializeARScene() {
         sceneView.delegate = self
@@ -343,6 +353,8 @@ class PresentationViewController: UIViewController {
     // MARK: - Camera capture session
     
     func processDetection(_ imageBuffer: CVPixelBuffer) {
+        guard state == .presenting else { return }
+        
         captureWidth = CVPixelBufferGetWidth(imageBuffer)
         captureHeight = CVPixelBufferGetHeight(imageBuffer)
         
@@ -388,7 +400,9 @@ extension PresentationViewController: ARSessionDelegate {
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
         if tryStartPresentation == true {
             tryStartPresentation = false
-            startPresentationCountdown()
+            
+            PresentationPreparationViewController.showView(self)
+            NotificationCenter.default.addObserver(self, selector: #selector(self.startPresenting), name: Notification.popoverDismissed, object: nil)
         }
         
         var updateInterval: Double
@@ -458,23 +472,32 @@ extension PresentationViewController {
         leftShoulderAngles.removeAll()
         leftShoulderAngles.removeAll()
         state = .preparing
+        
+        lblPrepareCountdown.isHidden = true
+        countdownBackgroundView.isHidden = true
+        lblCountdown.text = "00:15"
     }
     
     func startPresentationCountdown() {
-        lblCountdown.text = "\(self.countdown)"
+        print("aaa")
+        
+        lblPrepareCountdown.text = "5"
+        lblPrepareCountdown.isHidden = false
+        
         let _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: prepareCountdown)
     }
     
     func prepareCountdown(timer: Timer) {
         countdown -= 1
-        lblCountdown.text = "\(countdown)"
+        lblPrepareCountdown.text = "\(countdown)"
         
         if countdown == 0 {
             timer.invalidate()
+            lblPrepareCountdown.isHidden = true
+            countdownBackgroundView.isHidden = false
             
             countdown = 30
             state = .presenting
-            lblCountdown.text = String(format: "00:%02d", countdown / 2)
             let _ = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: presentationCountdown)
         }
     }
