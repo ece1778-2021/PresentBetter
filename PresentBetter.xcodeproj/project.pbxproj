@@ -76,6 +76,42 @@
 			path = Images;
 			sourceTree = "<group>";
 		};
+		E5134B5C25E84A880098C7E6 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				E5134B5925E83A6F0098C7E6 /* AlertView.swift */,
+				E5D2723D25E351400026CF41 /* FeedbackView.swift */,
+				E59A21A325D89CE5009E0082 /* PresentationView.swift */,
+				E53AE92025E811F300479BF1 /* PresentationPreparationView.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		E5134B5D25E84AAA0098C7E6 /* Graphics */ = {
+			isa = PBXGroup;
+			children = (
+				E53AE91D25E80BF400479BF1 /* CustomGraphics.swift */,
+			);
+			path = Graphics;
+			sourceTree = "<group>";
+		};
+		E5134B5E25E84ABE0098C7E6 /* Processors */ = {
+			isa = PBXGroup;
+			children = (
+				E5B7DDE325DAC49100EBE2E5 /* MLProvider.swift */,
+			);
+			path = Processors;
+			sourceTree = "<group>";
+		};
+		E5134B5F25E84AD70098C7E6 /* Delegates */ = {
+			isa = PBXGroup;
+			children = (
+				E59A219F25D89CE5009E0082 /* AppDelegate.swift */,
+				E59A21A125D89CE5009E0082 /* SceneDelegate.swift */,
+			);
+			path = Delegates;
+			sourceTree = "<group>";
+		};
 		E5914D7825E75116009A0BC0 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -109,21 +145,17 @@
 		E59A219E25D89CE5009E0082 /* PresentBetter */ = {
 			isa = PBXGroup;
 			children = (
+				E5134B5F25E84AD70098C7E6 /* Delegates */,
+				E5134B5E25E84ABE0098C7E6 /* Processors */,
+				E5134B5D25E84AAA0098C7E6 /* Graphics */,
+				E5134B5C25E84A880098C7E6 /* ViewControllers */,
 				E5134B4E25E833B40098C7E6 /* Images */,
 				E5914D7825E75116009A0BC0 /* Fonts */,
 				E5B7DDE025DA43CF00EBE2E5 /* emotion_image_input.mlmodel */,
-				E59A219F25D89CE5009E0082 /* AppDelegate.swift */,
-				E59A21A125D89CE5009E0082 /* SceneDelegate.swift */,
-				E59A21A325D89CE5009E0082 /* PresentationView.swift */,
-				E5134B5925E83A6F0098C7E6 /* AlertView.swift */,
-				E53AE91D25E80BF400479BF1 /* CustomGraphics.swift */,
-				E5B7DDE325DAC49100EBE2E5 /* MLProvider.swift */,
 				E59A21A525D89CE5009E0082 /* Main.storyboard */,
-				E53AE92025E811F300479BF1 /* PresentationPreparationView.swift */,
 				E59A21A825D89CE7009E0082 /* Assets.xcassets */,
 				E59A21AA25D89CE7009E0082 /* LaunchScreen.storyboard */,
 				E59A21AD25D89CE7009E0082 /* Info.plist */,
-				E5D2723D25E351400026CF41 /* FeedbackView.swift */,
 			);
 			path = PresentBetter;
 			sourceTree = "<group>";
