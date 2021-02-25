@@ -10,6 +10,7 @@
 		E50160AF25E827BF0040966F /* Spartan-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E50160AE25E827BF0040966F /* Spartan-Bold.ttf */; };
 		E5134B5325E833C50098C7E6 /* PresentBetter.png in Resources */ = {isa = PBXBuildFile; fileRef = E5134B5225E833C50098C7E6 /* PresentBetter.png */; };
 		E5134B5725E835410098C7E6 /* ShapeArt.png in Resources */ = {isa = PBXBuildFile; fileRef = E5134B5625E835410098C7E6 /* ShapeArt.png */; };
+		E5134B5A25E83A6F0098C7E6 /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5134B5925E83A6F0098C7E6 /* AlertView.swift */; };
 		E53AE91E25E80BF400479BF1 /* CustomGraphics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53AE91D25E80BF400479BF1 /* CustomGraphics.swift */; };
 		E53AE92125E811F300479BF1 /* PresentationPreparationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53AE92025E811F300479BF1 /* PresentationPreparationView.swift */; };
 		E5914D7A25E7516F009A0BC0 /* Now-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = E5914D7925E7512D009A0BC0 /* Now-Regular.otf */; };
@@ -33,6 +34,7 @@
 		E50160AE25E827BF0040966F /* Spartan-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Spartan-Bold.ttf"; sourceTree = "<group>"; };
 		E5134B5225E833C50098C7E6 /* PresentBetter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PresentBetter.png; sourceTree = "<group>"; };
 		E5134B5625E835410098C7E6 /* ShapeArt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ShapeArt.png; sourceTree = "<group>"; };
+		E5134B5925E83A6F0098C7E6 /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
 		E53AE91D25E80BF400479BF1 /* CustomGraphics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomGraphics.swift; sourceTree = "<group>"; };
 		E53AE92025E811F300479BF1 /* PresentationPreparationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationPreparationView.swift; sourceTree = "<group>"; };
 		E5914D7925E7512D009A0BC0 /* Now-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Now-Regular.otf"; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 				E59A219F25D89CE5009E0082 /* AppDelegate.swift */,
 				E59A21A125D89CE5009E0082 /* SceneDelegate.swift */,
 				E59A21A325D89CE5009E0082 /* PresentationView.swift */,
+				E5134B5925E83A6F0098C7E6 /* AlertView.swift */,
 				E53AE91D25E80BF400479BF1 /* CustomGraphics.swift */,
 				E5B7DDE325DAC49100EBE2E5 /* MLProvider.swift */,
 				E59A21A525D89CE5009E0082 /* Main.storyboard */,
@@ -206,6 +209,7 @@
 			files = (
 				E53AE92125E811F300479BF1 /* PresentationPreparationView.swift in Sources */,
 				E59A21A425D89CE5009E0082 /* PresentationView.swift in Sources */,
+				E5134B5A25E83A6F0098C7E6 /* AlertView.swift in Sources */,
 				E59A21A025D89CE5009E0082 /* AppDelegate.swift in Sources */,
 				E59A21A225D89CE5009E0082 /* SceneDelegate.swift in Sources */,
 				E5B7DDE125DA43CF00EBE2E5 /* emotion_image_input.mlmodel in Sources */,

@@ -95,7 +95,7 @@ class PresentationViewController: UIViewController {
                     PresentationPreparationViewController.showView(self)
                     NotificationCenter.default.addObserver(self, selector: #selector(self.startPresenting), name: Notification.popoverDismissed, object: nil)
                 } else {
-                    self.lblCountdown.text = "Camera error!"
+                    NoCameraViewController.showView(self)
                 }
             }
         }
@@ -399,10 +399,11 @@ extension PresentationViewController: ARSCNViewDelegate {
 extension PresentationViewController: ARSessionDelegate {
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
         if tryStartPresentation == true {
-            tryStartPresentation = false
-            
-            PresentationPreparationViewController.showView(self)
-            NotificationCenter.default.addObserver(self, selector: #selector(self.startPresenting), name: Notification.popoverDismissed, object: nil)
+            if AVCaptureDevice.authorizationStatus(for: .video) == .authorized {
+                tryStartPresentation = false
+                PresentationPreparationViewController.showView(self)
+                NotificationCenter.default.addObserver(self, selector: #selector(self.startPresenting), name: Notification.popoverDismissed, object: nil)
+            }
         }
         
         var updateInterval: Double
@@ -422,7 +423,7 @@ extension PresentationViewController: ARSessionDelegate {
     
     func session(_ session: ARSession, didFailWithError error: Error) {
         print("Cannot start ARKit: \(error.localizedDescription)")
-        lblCountdown.text = "Camera error!"
+        NoCameraViewController.showView(self)
     }
 }
 
@@ -479,8 +480,6 @@ extension PresentationViewController {
     }
     
     func startPresentationCountdown() {
-        print("aaa")
-        
         lblPrepareCountdown.text = "5"
         lblPrepareCountdown.isHidden = false
         
