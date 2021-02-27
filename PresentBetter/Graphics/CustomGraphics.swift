@@ -30,4 +30,33 @@ class CustomGraphics {
         
         return path
     }
+    
+    static func shapeForEyeCalibrationDot(insets: UIEdgeInsets) -> [CAShapeLayer] {
+        var shapes = [CAShapeLayer]()
+        
+        let path1 = UIBezierPath(arcCenter: CGPoint(x: 10 + 36 / 2, y: insets.top + 10 + 36 / 2), radius: 18, startAngle: 0, endAngle: 2 * .pi, clockwise: true)
+        let shape1 = CAShapeLayer()
+        shape1.path = path1.cgPath
+        shape1.fillColor = UIColor.white.cgColor
+        shape1.strokeColor = UIColor.gray.cgColor
+        shape1.lineWidth = 3.0
+        shapes.append(shape1)
+        
+        let path2 = UIBezierPath(arcCenter: CGPoint(x: 10 + 36 / 2, y: insets.top + 10 + 36 / 2), radius: 5, startAngle: 0, endAngle: 2 * .pi, clockwise: true)
+        let shape2 = CAShapeLayer()
+        shape2.path = path2.cgPath
+        shape2.fillColor = UIColor.gray.cgColor
+        shapes.append(shape2)
+        
+        let path3 = UIBezierPath(arcCenter: CGPoint(x: 10 + 36 / 2, y: insets.top + 10 + 36 / 2), radius: 21, startAngle: 0, endAngle: 2 * .pi, clockwise: true)
+        let shape3 = CAShapeLayer()
+        shape3.path = path3.cgPath
+        shape3.fillColor = UIColor.clear.cgColor
+        shape3.strokeColor = UIColor.white.cgColor
+        shape3.lineWidth = 3.0
+        shape3.strokeEnd = 0
+        shapes.append(shape3)
+        
+        return shapes
+    }
 }

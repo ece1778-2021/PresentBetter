@@ -9,6 +9,10 @@ enum PresentationState {
     case presenting
 }
 
+func deg(_ rad: Float) -> Float {
+    return rad / .pi * 180
+}
+
 class PresentationViewController: UIViewController {
     @IBOutlet var imageView: UIImageView!
     @IBOutlet var sceneView: ARSCNView!
@@ -29,6 +33,8 @@ class PresentationViewController: UIViewController {
     var supportsDepthCamera = false
     var lastARUpdateFrameTime: Date?    // Stores the last time ARSession updates its frame
     var tryStartPresentation = false
+    var leftEye: Eye!, rightEye: Eye!
+    var devicePlane: Device!
     
     // Indicates if AVCaptureSession configuration is successful
     var accessSuccessful = false
@@ -121,9 +127,14 @@ class PresentationViewController: UIViewController {
     }
     
     func initializeARScene() {
+        leftEye = Eye()
+        rightEye = Eye()
+        devicePlane = Device()
+        
         sceneView.delegate = self
         sceneView.session.delegate = self
         sceneView.preferredFramesPerSecond = 15
+        sceneView.scene.rootNode.addChildNode(devicePlane.node)
     }
     
     func startARSession() {
@@ -381,13 +392,39 @@ class PresentationViewController: UIViewController {
 }
 
 extension PresentationViewController: ARSCNViewDelegate {
+    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
+        guard anchor is ARFaceAnchor else {
+            return nil
+        }
+        
+        let faceNode = SCNNode()
+        faceNode.addChildNode(leftEye.node)
+        faceNode.addChildNode(rightEye.node)
+        return faceNode
+    }
+    
+    func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+        guard let sceneTransformInfo = sceneView.pointOfView?.transform else {
+            return
+        }
+        devicePlane.node.transform = sceneTransformInfo
+    }
+    
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
         guard let faceAnchor = anchor as? ARFaceAnchor else {
             return
         }
         
+        leftEye.node.simdTransform = faceAnchor.leftEyeTransform
+        rightEye.node.simdTransform = faceAnchor.rightEyeTransform
+        
+        // Up-down eye rotation
+        let eyeRotateX = (leftEye.node.simdEulerAngles.x + rightEye.node.simdEulerAngles.x) / 2
+        // Left-right eye rotation
+        let eyeRotateY = (leftEye.node.simdEulerAngles.y + rightEye.node.simdEulerAngles.y) / 2
+        
         if state == .presenting {
-            if faceAnchor.lookAtPoint.x < -0.002 || faceAnchor.lookAtPoint.x > 0.14 || faceAnchor.lookAtPoint.y > -0.004 || faceAnchor.lookAtPoint.y < -0.112 {
+            if deg(eyeRotateX) * leftEye.distanceToDevice() * 100 < -(3.0 * leftEye.optimumDistanceInCm) || abs(deg(eyeRotateY)) * leftEye.distanceToDevice() * 100 > 4.0 * leftEye.optimumDistanceInCm {
                 lostFocusDetected += 1
             } else {
                 focusDetected += 1
