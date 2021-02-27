@@ -60,6 +60,47 @@ class Eye {
     }
 }
 
+class EyeContactSession {
+    var leftEye: Eye, rightEye: Eye
+    var devicePlane: Device
+    
+    init(currentScene: SCNScene) {
+        leftEye = Eye()
+        rightEye = Eye()
+        devicePlane = Device()
+        currentScene.rootNode.addChildNode(devicePlane.node)
+    }
+    
+    func faceNode() -> SCNNode {
+        let faceNode = SCNNode()
+        faceNode.addChildNode(leftEye.node)
+        faceNode.addChildNode(rightEye.node)
+        return faceNode
+    }
+    
+    func updateDevicePlane(newTransform: SCNMatrix4) {
+        devicePlane.node.transform = newTransform
+    }
+    
+    func updateFaceAnchor(anchor: ARFaceAnchor) {
+        leftEye.node.simdTransform = anchor.leftEyeTransform
+        rightEye.node.simdTransform = anchor.rightEyeTransform
+    }
+    
+    func isWithAttention() -> Bool {
+        // Up-down eye rotation
+        let eyeRotateX = (leftEye.node.simdEulerAngles.x + rightEye.node.simdEulerAngles.x) / 2
+        // Left-right eye rotation
+        let eyeRotateY = (leftEye.node.simdEulerAngles.y + rightEye.node.simdEulerAngles.y) / 2
+        
+        if deg(eyeRotateX) * leftEye.distanceToDevice() * 100 < -(3.0 * leftEye.optimumDistanceInCm) || abs(deg(eyeRotateY)) * leftEye.distanceToDevice() * 100 > 4.0 * leftEye.optimumDistanceInCm {
+            return false
+        } else {
+            return true
+        }
+    }
+}
+
 extension SCNVector3 {
     func length() -> Float {
         return sqrtf(x * x + y * y + z * z)

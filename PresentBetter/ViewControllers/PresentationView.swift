@@ -33,24 +33,25 @@ class PresentationViewController: UIViewController {
     var supportsDepthCamera = false
     var lastARUpdateFrameTime: Date?    // Stores the last time ARSession updates its frame
     var tryStartPresentation = false
-    var leftEye: Eye!, rightEye: Eye!
-    var devicePlane: Device!
     
     // Indicates if AVCaptureSession configuration is successful
     var accessSuccessful = false
     var configSuccessful = false
     
-    // Stores the width and height of captured CVPixelBuffer, and the UIImage representation of it
-    var captureWidth = 0, captureHeight = 0
+    // UIImage representation of captured CVPixelBuffer
     var captureImage: UIImage?
     
     var roundRectLayer: CAShapeLayer!
+    
+    // Presentation quality measurement sessions
+    var eyeContactSession: EyeContactSession!
+    var facialExpressionSession: FacialExpressionSession!
+    var handPoseSession: HandPoseSession!
     
     // Presentation parameters
     var state: PresentationState = .preparing
     var countdown = 5
     var smiledInSpan = false, totalSmiles = 0
-    var leftShoulderAngles = [CGFloat](), rightShoulderAngles = [CGFloat]()
     var handMovedInSpan = false, totalHandMoves = 0
     var focusDetected = 0, lostFocusDetected = 0, totalLooks = 0
     
@@ -70,6 +71,9 @@ class PresentationViewController: UIViewController {
         roundRectLayer.fillColor = UIColor.clear.cgColor
         roundRectLayer.lineWidth = 2.0
         roundRectLayer.strokeColor = UIColor.red.cgColor
+        
+        facialExpressionSession = FacialExpressionSession(boundingFrame: view.frame)
+        handPoseSession = HandPoseSession()
         
         if supportsDepthCamera {
             sceneView.layer.addSublayer(roundRectLayer)
@@ -127,14 +131,10 @@ class PresentationViewController: UIViewController {
     }
     
     func initializeARScene() {
-        leftEye = Eye()
-        rightEye = Eye()
-        devicePlane = Device()
-        
+        eyeContactSession = EyeContactSession(currentScene: sceneView.scene)
         sceneView.delegate = self
         sceneView.session.delegate = self
         sceneView.preferredFramesPerSecond = 15
-        sceneView.scene.rootNode.addChildNode(devicePlane.node)
     }
     
     func startARSession() {
@@ -216,60 +216,25 @@ class PresentationViewController: UIViewController {
 
     // MARK: - Facial expression detection
     
-    func getFaceImage(originalImage: UIImage, faceBox: CGRect) -> CGImage? {
-        let transform = CGAffineTransform(rotationAngle: .pi / 2).translatedBy(x: 0, y: -originalImage.size.height)
-        
-        guard let cgImage = originalImage.cgImage?.cropping(to: faceBox.applying(transform)) else {
-            return nil
-        }
-        let width = cgImage.width
-        let height = cgImage.height
-        
-        guard let cgContext = CGContext(data: nil, width: width, height: height, bitsPerComponent: 8, bytesPerRow: 0, space: CGColorSpaceCreateDeviceGray(), bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.none.rawValue).rawValue) else {
-            return nil
-        }
-        cgContext.rotate(by: -.pi / 2)
-        cgContext.translateBy(x: CGFloat(-height), y: 0)
-        cgContext.draw(cgImage, in: CGRect(x: 0, y: 0, width: width, height: height))
-        
-        return cgContext.makeImage()
-    }
-    
     func detectedFace(request: VNRequest, error: Error?) {
         guard let results = request.results as? [VNFaceObservation] else {
             return
         }
         guard let result = results.first else {
+            self.roundRectLayer.isHidden = true
             return
         }
         
+        let emotionPrediction = facialExpressionSession.detectExpressionAndUpdateDrawing(faceObservation: result)
+        if emotionPrediction == .Happy {
+            smiledInSpan = true
+        }
+        
         DispatchQueue.main.async {
-            let width = Int(self.view.frame.width)
-            let height = Int(self.view.frame.width * (CGFloat(self.captureWidth) / CGFloat(self.captureHeight)))
-            
-            var transform: CGAffineTransform
-            if self.supportsDepthCamera {
-                transform = CGAffineTransform(scaleX: -1, y: -1).translatedBy(x: -CGFloat(width), y: -CGFloat(height))
-            } else {
-                transform = CGAffineTransform(scaleX: 1, y: -1).translatedBy(x: 0, y: -CGFloat(height))
-            }
-            
-            let imageBoundingBox = VNImageRectForNormalizedRect(result.boundingBox, width, height)
-                .applying(transform)
-            let imageBoundingBoxNotTranslated = VNImageRectForNormalizedRect(result.boundingBox, self.captureHeight, self.captureWidth)
-            
-            let path = UIBezierPath(roundedRect: imageBoundingBox, cornerRadius: 0)
-            self.roundRectLayer.path = path.cgPath
-            
-            guard let captureImage = self.captureImage else {
-                return
-            }
-            if let faceImageRef = self.getFaceImage(originalImage: captureImage, faceBox: imageBoundingBoxNotTranslated) {
-                if let emotionPrediction = MLDataProvider.predictEmotion(image: faceImageRef) {
-                    if emotionPrediction == .Happy {
-                        self.smiledInSpan = true
-                    }
-                }
+            if let imageBoundingBox = self.facialExpressionSession.imageBoundingBox {
+                let path = UIBezierPath(roundedRect: imageBoundingBox, cornerRadius: 0)
+                self.roundRectLayer.isHidden = false
+                self.roundRectLayer.path = path.cgPath
             }
         }
     }
@@ -288,76 +253,9 @@ class PresentationViewController: UIViewController {
             return
         }
         
-        var keyPoints: [VNHumanBodyPoseObservation.JointName : CGPoint?] = [
-            .leftWrist : nil,
-            .leftElbow : nil,
-            .leftShoulder : nil,
-            .rightWrist : nil,
-            .rightElbow : nil,
-            .rightShoulder : nil
-        ]
-        
-        for (key, _) in keyPoints {
-            if let value = points[key], value.confidence > 0.4 {
-                keyPoints[key] = value.location
-            }
-        }
-        
-        var a: CGFloat, b: CGFloat, c: CGFloat
-        var leftAngle: CGFloat, rightAngle: CGFloat
-        
-        if let leftWrist = keyPoints[.leftWrist]!,
-           let leftElbow = keyPoints[.leftElbow]!,
-           let leftShoulder = keyPoints[.leftShoulder]! {
-            a = CGPointDistance(from: leftWrist, to: leftShoulder)
-            b = CGPointDistance(from: leftWrist, to: leftElbow)
-            c = CGPointDistance(from: leftElbow, to: leftShoulder)
-            leftAngle = acos((b * b + c * c - a * a) / (2 * b * c)) / .pi * 180
-        } else {
-            leftAngle = .nan
-        }
-        
-        if let rightWrist = keyPoints[.rightWrist]!,
-           let rightElbow = keyPoints[.rightElbow]!,
-           let rightShoulder = keyPoints[.rightShoulder]! {
-            a = CGPointDistance(from: rightWrist, to: rightShoulder)
-            b = CGPointDistance(from: rightWrist, to: rightElbow)
-            c = CGPointDistance(from: rightElbow, to: rightShoulder)
-            rightAngle = acos((b * b + c * c - a * a) / (2 * b * c)) / .pi * 180
-        } else {
-            rightAngle = .nan
-        }
-        
-        if leftAngle != .nan {
-            leftShoulderAngles.append(leftAngle)
-        } else {
-            if leftShoulderAngles.count > 0 {
-                leftShoulderAngles.append(leftShoulderAngles.last!)
-            }
-        }
-        if leftShoulderAngles.count > 15 {
-            leftShoulderAngles.removeFirst()
-        }
-        if leftShoulderAngles.count > 0 {
-            if leftShoulderAngles.max()! - leftShoulderAngles.min()! > 15 {
-                handMovedInSpan = true
-            }
-        }
-        
-        if rightAngle != .nan {
-            rightShoulderAngles.append(rightAngle)
-        } else {
-            if rightShoulderAngles.count > 0 {
-                rightShoulderAngles.append(leftShoulderAngles.last!)
-            }
-        }
-        if rightShoulderAngles.count > 15 {
-            rightShoulderAngles.removeFirst()
-        }
-        if rightShoulderAngles.count > 0 {
-            if rightShoulderAngles.max()! - rightShoulderAngles.min()! > 15 {
-                handMovedInSpan = true
-            }
+        let handMoved = handPoseSession.updateDataAndEvaluateDetectionResult(withBodyKeyPoints: points)
+        if handMoved {
+            handMovedInSpan = true
         }
     }
     
@@ -366,8 +264,8 @@ class PresentationViewController: UIViewController {
     func processDetection(_ imageBuffer: CVPixelBuffer) {
         guard state == .presenting else { return }
         
-        captureWidth = CVPixelBufferGetWidth(imageBuffer)
-        captureHeight = CVPixelBufferGetHeight(imageBuffer)
+        let captureWidth = CVPixelBufferGetWidth(imageBuffer)
+        let captureHeight = CVPixelBufferGetHeight(imageBuffer)
         
         let ciImage = CIImage(cvPixelBuffer: imageBuffer)
         let ciContext = CIContext(options: nil)
@@ -376,6 +274,7 @@ class PresentationViewController: UIViewController {
         }
         
         captureImage = UIImage(cgImage: cgImage, scale: 1, orientation: .leftMirrored)
+        facialExpressionSession.updateFrame(withImage: captureImage, width: captureWidth, height: captureHeight)
         
         if state == .presenting {
             let detectFaceRequest = VNDetectFaceRectanglesRequest(completionHandler: detectedFace)
@@ -387,6 +286,10 @@ class PresentationViewController: UIViewController {
             } catch {
                 print(error.localizedDescription)
             }
+        } else {
+            DispatchQueue.main.async {
+                self.roundRectLayer.isHidden = true
+            }
         }
     }
 }
@@ -396,38 +299,29 @@ extension PresentationViewController: ARSCNViewDelegate {
         guard anchor is ARFaceAnchor else {
             return nil
         }
-        
-        let faceNode = SCNNode()
-        faceNode.addChildNode(leftEye.node)
-        faceNode.addChildNode(rightEye.node)
-        return faceNode
+        return eyeContactSession.faceNode()
     }
     
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         guard let sceneTransformInfo = sceneView.pointOfView?.transform else {
             return
         }
-        devicePlane.node.transform = sceneTransformInfo
+        eyeContactSession.updateDevicePlane(newTransform: sceneTransformInfo)
     }
+    
+    // MARK: - Eye contact detection
     
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
         guard let faceAnchor = anchor as? ARFaceAnchor else {
             return
         }
-        
-        leftEye.node.simdTransform = faceAnchor.leftEyeTransform
-        rightEye.node.simdTransform = faceAnchor.rightEyeTransform
-        
-        // Up-down eye rotation
-        let eyeRotateX = (leftEye.node.simdEulerAngles.x + rightEye.node.simdEulerAngles.x) / 2
-        // Left-right eye rotation
-        let eyeRotateY = (leftEye.node.simdEulerAngles.y + rightEye.node.simdEulerAngles.y) / 2
+        eyeContactSession.updateFaceAnchor(anchor: faceAnchor)
         
         if state == .presenting {
-            if deg(eyeRotateX) * leftEye.distanceToDevice() * 100 < -(3.0 * leftEye.optimumDistanceInCm) || abs(deg(eyeRotateY)) * leftEye.distanceToDevice() * 100 > 4.0 * leftEye.optimumDistanceInCm {
-                lostFocusDetected += 1
-            } else {
+            if eyeContactSession.isWithAttention() {
                 focusDetected += 1
+            } else {
+                lostFocusDetected += 1
             }
         }
     }
@@ -480,14 +374,6 @@ extension PresentationViewController: AVCaptureVideoDataOutputSampleBufferDelega
 }
 
 extension PresentationViewController {
-    func CGPointDistance(from: CGPoint, to: CGPoint) -> CGFloat {
-        let squareX = (from.x - to.x) * (from.x - to.x)
-        let squareY = (from.y - to.y) * (from.y - to.y)
-        return sqrt(squareX + squareY)
-    }
-}
-
-extension PresentationViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "forwardToFeedback" {
             let feedbackView = segue.destination as! FeedbackViewController
@@ -507,9 +393,9 @@ extension PresentationViewController {
         focusDetected = 0
         lostFocusDetected = 0
         totalLooks = 0
-        leftShoulderAngles.removeAll()
-        leftShoulderAngles.removeAll()
         state = .preparing
+        
+        handPoseSession.reset()
         
         lblPrepareCountdown.isHidden = true
         countdownBackgroundView.isHidden = true

@@ -31,6 +31,7 @@
 		E5D2723E25E351400026CF41 /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5D2723D25E351400026CF41 /* FeedbackView.swift */; };
 		E5DEE73025EA967F00BE0E1F /* EyeTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DEE72F25EA967F00BE0E1F /* EyeTrack.swift */; };
 		E5DEE73325EABB1400BE0E1F /* HandPose.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DEE73225EABB1400BE0E1F /* HandPose.swift */; };
+		E5DEE73825EB0AB900BE0E1F /* FacialExpression.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DEE73725EB0AB900BE0E1F /* FacialExpression.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +61,7 @@
 		E5D2723D25E351400026CF41 /* FeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackView.swift; sourceTree = "<group>"; };
 		E5DEE72F25EA967F00BE0E1F /* EyeTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeTrack.swift; sourceTree = "<group>"; };
 		E5DEE73225EABB1400BE0E1F /* HandPose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandPose.swift; sourceTree = "<group>"; };
+		E5DEE73725EB0AB900BE0E1F /* FacialExpression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacialExpression.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,9 +107,10 @@
 		E5134B5E25E84ABE0098C7E6 /* Processors */ = {
 			isa = PBXGroup;
 			children = (
-				E5B7DDE325DAC49100EBE2E5 /* MLProvider.swift */,
 				E5DEE72F25EA967F00BE0E1F /* EyeTrack.swift */,
+				E5DEE73725EB0AB900BE0E1F /* FacialExpression.swift */,
 				E5DEE73225EABB1400BE0E1F /* HandPose.swift */,
+				E5B7DDE325DAC49100EBE2E5 /* MLProvider.swift */,
 			);
 			path = Processors;
 			sourceTree = "<group>";
@@ -252,6 +255,7 @@
 				E59A21A425D89CE5009E0082 /* PresentationView.swift in Sources */,
 				E5134B5A25E83A6F0098C7E6 /* AlertView.swift in Sources */,
 				E53996D925E99C2D00F38FE2 /* EyeCalibrationView.swift in Sources */,
+				E5DEE73825EB0AB900BE0E1F /* FacialExpression.swift in Sources */,
 				E59A21A025D89CE5009E0082 /* AppDelegate.swift in Sources */,
 				E59A21A225D89CE5009E0082 /* SceneDelegate.swift in Sources */,
 				E5B7DDE125DA43CF00EBE2E5 /* emotion_image_input.mlmodel in Sources */,
