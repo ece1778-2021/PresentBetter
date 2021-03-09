@@ -3,13 +3,20 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		14DE2E8725F781BE0064982A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 14DE2E8625F781BE0064982A /* GoogleService-Info.plist */; };
+		14DE2E9025F782050064982A /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DE2E8A25F782050064982A /* LoginView.swift */; };
+		14DE2E9225F782050064982A /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DE2E8C25F782050064982A /* HomeView.swift */; };
+		14DE2E9325F782050064982A /* PresentationViewSUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DE2E8D25F782050064982A /* PresentationViewSUI.swift */; };
+		14DE2E9425F782050064982A /* SignupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DE2E8E25F782050064982A /* SignupView.swift */; };
+		14DE2E9525F782050064982A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DE2E8F25F782050064982A /* ContentView.swift */; };
+		14DE2EAC25F786E20064982A /* KeyboardAvoid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DE2EAB25F786E20064982A /* KeyboardAvoid.swift */; };
+		14DE2EB025F7878E0064982A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DE2EAF25F7878E0064982A /* SceneDelegate.swift */; };
+		14DE2EB325F7881D0064982A /* PresentBetterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DE2EB225F7881D0064982A /* PresentBetterApp.swift */; };
 		3E7535684384A1302C799024 /* Pods_PresentBetter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3011A6E479955BD9FE8E02C9 /* Pods_PresentBetter.framework */; };
-		E59A21A025D89CE5009E0082 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59A219F25D89CE5009E0082 /* AppDelegate.swift */; };
-		E59A21A225D89CE5009E0082 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59A21A125D89CE5009E0082 /* SceneDelegate.swift */; };
 		E59A21A425D89CE5009E0082 /* PresentationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59A21A325D89CE5009E0082 /* PresentationView.swift */; };
 		E59A21A725D89CE5009E0082 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E59A21A525D89CE5009E0082 /* Main.storyboard */; };
 		E59A21A925D89CE7009E0082 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E59A21A825D89CE7009E0082 /* Assets.xcassets */; };
@@ -20,12 +27,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		14DE2E8625F781BE0064982A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		14DE2E8A25F782050064982A /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		14DE2E8C25F782050064982A /* HomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		14DE2E8D25F782050064982A /* PresentationViewSUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresentationViewSUI.swift; sourceTree = "<group>"; };
+		14DE2E8E25F782050064982A /* SignupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupView.swift; sourceTree = "<group>"; };
+		14DE2E8F25F782050064982A /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		14DE2EAB25F786E20064982A /* KeyboardAvoid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardAvoid.swift; sourceTree = "<group>"; };
+		14DE2EAF25F7878E0064982A /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		14DE2EB225F7881D0064982A /* PresentBetterApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresentBetterApp.swift; sourceTree = "<group>"; };
 		251BDF58DAC6DB81C6385110 /* Pods-PresentBetter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PresentBetter.release.xcconfig"; path = "Target Support Files/Pods-PresentBetter/Pods-PresentBetter.release.xcconfig"; sourceTree = "<group>"; };
 		3011A6E479955BD9FE8E02C9 /* Pods_PresentBetter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PresentBetter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		808D0FBB614B4812650FC18C /* Pods-PresentBetter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PresentBetter.debug.xcconfig"; path = "Target Support Files/Pods-PresentBetter/Pods-PresentBetter.debug.xcconfig"; sourceTree = "<group>"; };
 		E59A219C25D89CE5009E0082 /* PresentBetter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PresentBetter.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		E59A219F25D89CE5009E0082 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E59A21A125D89CE5009E0082 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		E59A21A325D89CE5009E0082 /* PresentationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationView.swift; sourceTree = "<group>"; };
 		E59A21A625D89CE5009E0082 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E59A21A825D89CE7009E0082 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -48,6 +62,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		14DE2E8925F782050064982A /* BasicUI */ = {
+			isa = PBXGroup;
+			children = (
+				14DE2E8A25F782050064982A /* LoginView.swift */,
+				14DE2E8C25F782050064982A /* HomeView.swift */,
+				14DE2E8D25F782050064982A /* PresentationViewSUI.swift */,
+				14DE2E8E25F782050064982A /* SignupView.swift */,
+				14DE2E8F25F782050064982A /* ContentView.swift */,
+				14DE2EAB25F786E20064982A /* KeyboardAvoid.swift */,
+			);
+			path = BasicUI;
+			sourceTree = "<group>";
+		};
 		925FFFC2C088FC58942F4794 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -77,15 +104,17 @@
 		E59A219E25D89CE5009E0082 /* PresentBetter */ = {
 			isa = PBXGroup;
 			children = (
+				14DE2E8925F782050064982A /* BasicUI */,
 				E5B7DDE025DA43CF00EBE2E5 /* emotion_image_input.mlmodel */,
-				E59A219F25D89CE5009E0082 /* AppDelegate.swift */,
-				E59A21A125D89CE5009E0082 /* SceneDelegate.swift */,
+				14DE2EB225F7881D0064982A /* PresentBetterApp.swift */,
+				14DE2EAF25F7878E0064982A /* SceneDelegate.swift */,
 				E59A21A325D89CE5009E0082 /* PresentationView.swift */,
 				E5B7DDE325DAC49100EBE2E5 /* MLProvider.swift */,
 				E59A21A525D89CE5009E0082 /* Main.storyboard */,
 				E59A21A825D89CE7009E0082 /* Assets.xcassets */,
 				E59A21AA25D89CE7009E0082 /* LaunchScreen.storyboard */,
 				E59A21AD25D89CE7009E0082 /* Info.plist */,
+				14DE2E8625F781BE0064982A /* GoogleService-Info.plist */,
 				E5D2723D25E351400026CF41 /* FeedbackView.swift */,
 			);
 			path = PresentBetter;
@@ -97,7 +126,6 @@
 				808D0FBB614B4812650FC18C /* Pods-PresentBetter.debug.xcconfig */,
 				251BDF58DAC6DB81C6385110 /* Pods-PresentBetter.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -161,6 +189,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E59A21AC25D89CE7009E0082 /* LaunchScreen.storyboard in Resources */,
+				14DE2E8725F781BE0064982A /* GoogleService-Info.plist in Resources */,
 				E59A21A925D89CE7009E0082 /* Assets.xcassets in Resources */,
 				E59A21A725D89CE5009E0082 /* Main.storyboard in Resources */,
 			);
@@ -215,12 +244,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				14DE2E9225F782050064982A /* HomeView.swift in Sources */,
 				E59A21A425D89CE5009E0082 /* PresentationView.swift in Sources */,
-				E59A21A025D89CE5009E0082 /* AppDelegate.swift in Sources */,
-				E59A21A225D89CE5009E0082 /* SceneDelegate.swift in Sources */,
+				14DE2E9525F782050064982A /* ContentView.swift in Sources */,
+				14DE2E9025F782050064982A /* LoginView.swift in Sources */,
+				14DE2E9325F782050064982A /* PresentationViewSUI.swift in Sources */,
+				14DE2EAC25F786E20064982A /* KeyboardAvoid.swift in Sources */,
 				E5B7DDE125DA43CF00EBE2E5 /* emotion_image_input.mlmodel in Sources */,
 				E5B7DDE425DAC49100EBE2E5 /* MLProvider.swift in Sources */,
+				14DE2E9425F782050064982A /* SignupView.swift in Sources */,
 				E5D2723E25E351400026CF41 /* FeedbackView.swift in Sources */,
+				14DE2EB025F7878E0064982A /* SceneDelegate.swift in Sources */,
+				14DE2EB325F7881D0064982A /* PresentBetterApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -369,7 +404,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 59R6ACD3LT;
+				DEVELOPMENT_TEAM = 5284TKX75A;
 				INFOPLIST_FILE = PresentBetter/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -390,7 +425,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 59R6ACD3LT;
+				DEVELOPMENT_TEAM = 5284TKX75A;
 				INFOPLIST_FILE = PresentBetter/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (

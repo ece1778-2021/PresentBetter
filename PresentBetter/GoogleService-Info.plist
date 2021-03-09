@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>408753112526-p91d1gb8iqm9lm1v5lvjm9d5q47sbo73.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.408753112526-p91d1gb8iqm9lm1v5lvjm9d5q47sbo73</string>
+	<key>API_KEY</key>
+	<string>AIzaSyA7aS-p_JieQjrT47rmFL_r3A3a636uM7E</string>
+	<key>GCM_SENDER_ID</key>
+	<string>408753112526</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.utoronto.PresentBetter</string>
+	<key>PROJECT_ID</key>
+	<string>presentbetter-6990f</string>
+	<key>STORAGE_BUCKET</key>
+	<string>presentbetter-6990f.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:408753112526:ios:4d424f14bb880f6639d79f</string>
+</dict>
+</plist>
