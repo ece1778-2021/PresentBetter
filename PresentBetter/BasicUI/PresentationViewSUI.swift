@@ -9,10 +9,10 @@ import SwiftUI
 
 struct PresentationViewSUI: UIViewControllerRepresentable {
         
-    typealias UIViewControllerType = PresentationViewController
-        
+    typealias UIViewControllerType = UINavigationController
+    
       func makeUIViewController(context: UIViewControllerRepresentableContext<PresentationViewSUI>) -> PresentationViewSUI.UIViewControllerType {
-        return UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "PresentationViewController") as! PresentationViewController
+        return UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "RootNavigation")
     }
         
       func updateUIViewController(_ uiViewController: PresentationViewSUI.UIViewControllerType, context: UIViewControllerRepresentableContext<PresentationViewSUI>) {}

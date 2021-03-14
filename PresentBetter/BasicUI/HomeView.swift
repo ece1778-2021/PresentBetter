@@ -55,7 +55,9 @@ struct HomeView: View {
                         }
                         Spacer()
                         NavigationLink(
-                            destination: PresentationViewSUI(),
+                            destination: PresentationViewSUI()
+                                .navigationBarHidden(true)
+                                .navigationBarBackButtonHidden(true),
                             label: {
                                 Image(systemName: "play.tv")
                                     .resizable()
