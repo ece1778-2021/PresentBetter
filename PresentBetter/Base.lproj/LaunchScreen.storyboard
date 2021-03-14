@@ -15,11 +15,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ShapeArt.png" translatesAutoresizingMaskIntoConstraints="NO" id="wTS-il-GVo">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ShapeArt" translatesAutoresizingMaskIntoConstraints="NO" id="wTS-il-GVo">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="448"/>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PresentBetter.png" translatesAutoresizingMaskIntoConstraints="NO" id="cNJ-cT-cAg">
-                                <rect key="frame" x="50" y="16" width="314" height="640"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PresentBetter" translatesAutoresizingMaskIntoConstraints="NO" id="cNJ-cT-cAg">
+                                <rect key="frame" x="50" y="176" width="314" height="320"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -41,7 +41,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="PresentBetter.png" width="640" height="640"/>
-        <image name="ShapeArt.png" width="640" height="640"/>
+        <image name="PresentBetter" width="320" height="320"/>
+        <image name="ShapeArt" width="320" height="320"/>
     </resources>
 </document>

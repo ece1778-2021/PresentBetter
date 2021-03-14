@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		E50160AF25E827BF0040966F /* Spartan-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E50160AE25E827BF0040966F /* Spartan-Bold.ttf */; };
-		E5134B5325E833C50098C7E6 /* PresentBetter.png in Resources */ = {isa = PBXBuildFile; fileRef = E5134B5225E833C50098C7E6 /* PresentBetter.png */; };
-		E5134B5725E835410098C7E6 /* ShapeArt.png in Resources */ = {isa = PBXBuildFile; fileRef = E5134B5625E835410098C7E6 /* ShapeArt.png */; };
 		E5134B5A25E83A6F0098C7E6 /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5134B5925E83A6F0098C7E6 /* AlertView.swift */; };
 		E53996D925E99C2D00F38FE2 /* EyeCalibrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53996D825E99C2D00F38FE2 /* EyeCalibrationView.swift */; };
 		E53AE91E25E80BF400479BF1 /* CustomGraphics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53AE91D25E80BF400479BF1 /* CustomGraphics.swift */; };
@@ -32,6 +30,8 @@
 		E5DEE73025EA967F00BE0E1F /* EyeTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DEE72F25EA967F00BE0E1F /* EyeTrack.swift */; };
 		E5DEE73325EABB1400BE0E1F /* HandPose.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DEE73225EABB1400BE0E1F /* HandPose.swift */; };
 		E5DEE73825EB0AB900BE0E1F /* FacialExpression.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DEE73725EB0AB900BE0E1F /* FacialExpression.swift */; };
+		E5DEE73C25EB145600BE0E1F /* ShapeArt.png in Resources */ = {isa = PBXBuildFile; fileRef = E5134B5625E835410098C7E6 /* ShapeArt.png */; };
+		E5DEE73D25EB145900BE0E1F /* PresentBetter.png in Resources */ = {isa = PBXBuildFile; fileRef = E5134B5225E833C50098C7E6 /* PresentBetter.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -232,7 +232,7 @@
 				E5914D8025E7540A009A0BC0 /* Montserrat-SemiBold.ttf in Resources */,
 				E5914D8325E7577B009A0BC0 /* Now-Medium.otf in Resources */,
 				E59A21AC25D89CE7009E0082 /* LaunchScreen.storyboard in Resources */,
-				E5134B5725E835410098C7E6 /* ShapeArt.png in Resources */,
+				E5DEE73C25EB145600BE0E1F /* ShapeArt.png in Resources */,
 				E5914D7D25E752D5009A0BC0 /* Now-Bold.otf in Resources */,
 				E5914D7A25E7516F009A0BC0 /* Now-Regular.otf in Resources */,
 				E5914D8625E758D0009A0BC0 /* Oswald-VariableFont_wght.ttf in Resources */,
@@ -240,7 +240,7 @@
 				E5914D8925E75941009A0BC0 /* Lato-Bold.ttf in Resources */,
 				E59A21A725D89CE5009E0082 /* Main.storyboard in Resources */,
 				E50160AF25E827BF0040966F /* Spartan-Bold.ttf in Resources */,
-				E5134B5325E833C50098C7E6 /* PresentBetter.png in Resources */,
+				E5DEE73D25EB145900BE0E1F /* PresentBetter.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
