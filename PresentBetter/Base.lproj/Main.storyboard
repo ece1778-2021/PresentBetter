@@ -201,16 +201,32 @@
                                     <action selector="btnPresentClicked:" destination="Obq-fj-TuG" eventType="touchUpInside" id="Sgy-pD-D2U"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iZA-qf-qE8">
+                                <rect key="frame" x="30" y="74" width="100" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="9x6-dY-LWK"/>
+                                    <constraint firstAttribute="height" constant="35" id="sgx-de-kri"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Montserrat-SemiBold" family="Montserrat" pointSize="22"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="BACK"/>
+                                <connections>
+                                    <action selector="btnBackClicked:" destination="Obq-fj-TuG" eventType="touchUpInside" id="iMv-Gm-47h"/>
+                                    <action selector="btnHomeClicked:" destination="Evp-Vg-my1" eventType="touchUpInside" id="0yg-12-5ji"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="eZP-GO-g4t"/>
                         <color key="backgroundColor" systemColor="systemGrayColor"/>
                         <constraints>
+                            <constraint firstItem="iZA-qf-qE8" firstAttribute="leading" secondItem="eZP-GO-g4t" secondAttribute="leading" constant="30" id="0mB-EF-IHR"/>
                             <constraint firstItem="SHw-hH-cdm" firstAttribute="top" secondItem="O66-Ta-r4z" secondAttribute="bottom" constant="15" id="Cm1-Or-ekn"/>
                             <constraint firstItem="GNo-GR-zQG" firstAttribute="top" secondItem="Gq1-Zc-r5s" secondAttribute="bottom" constant="30" id="GzY-4f-LNs"/>
                             <constraint firstItem="O66-Ta-r4z" firstAttribute="centerX" secondItem="yol-W9-9kl" secondAttribute="centerX" id="KqB-4H-ixK"/>
                             <constraint firstItem="Gq1-Zc-r5s" firstAttribute="top" secondItem="SHw-hH-cdm" secondAttribute="bottom" constant="30" id="acy-M5-QPY"/>
                             <constraint firstItem="eZP-GO-g4t" firstAttribute="trailing" secondItem="SHw-hH-cdm" secondAttribute="trailing" constant="15" id="bSV-uz-sR3"/>
                             <constraint firstItem="SHw-hH-cdm" firstAttribute="leading" secondItem="eZP-GO-g4t" secondAttribute="leading" constant="15" id="iYu-qX-9Rp"/>
+                            <constraint firstItem="iZA-qf-qE8" firstAttribute="top" secondItem="eZP-GO-g4t" secondAttribute="top" constant="30" id="p4J-c7-brX"/>
                             <constraint firstItem="Gq1-Zc-r5s" firstAttribute="centerY" secondItem="yol-W9-9kl" secondAttribute="centerY" constant="50" id="s5U-zp-1Xs"/>
                             <constraint firstItem="Gq1-Zc-r5s" firstAttribute="centerX" secondItem="yol-W9-9kl" secondAttribute="centerX" id="sRL-Ru-pHY"/>
                             <constraint firstItem="GNo-GR-zQG" firstAttribute="centerX" secondItem="yol-W9-9kl" secondAttribute="centerX" id="v54-gy-Cse"/>
@@ -218,6 +234,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="btnBack" destination="iZA-qf-qE8" id="xsk-kr-4AA"/>
                         <outlet property="btnPresent" destination="GNo-GR-zQG" id="31L-43-vYW"/>
                         <outlet property="personOutlineView" destination="Gq1-Zc-r5s" id="0qk-nZ-9J7"/>
                     </connections>

@@ -232,9 +232,9 @@ class PresentationViewController: UIViewController {
         
         DispatchQueue.main.async {
             if let imageBoundingBox = self.facialExpressionSession.imageBoundingBox {
-                let path = UIBezierPath(roundedRect: imageBoundingBox, cornerRadius: 0)
-                self.roundRectLayer.isHidden = false
-                self.roundRectLayer.path = path.cgPath
+                //let path = UIBezierPath(roundedRect: imageBoundingBox, cornerRadius: 0)
+                //self.roundRectLayer.isHidden = false
+                //self.roundRectLayer.path = path.cgPath
             }
         }
     }

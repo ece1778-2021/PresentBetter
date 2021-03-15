@@ -23,9 +23,9 @@ struct HomeView: View {
                     lightBlueColor
                     VStack{
                         Spacer()
-                        Text("Welcome,")
+                        Text("WELCOME BACK,\nUSER!")
                             .foregroundColor(.white)
-                            .font(.system(size: 45, weight: .bold, design: .default))
+                            .font(.custom("Spartan-Bold", size: 45))
                             .multilineTextAlignment(.center)
                         Spacer()
                         HStack{
@@ -33,22 +33,22 @@ struct HomeView: View {
                             VStack{
                                 Text("HIGH SCORE")
                                     .foregroundColor(.white)
-                                    .font(.system(size: 15))
+                                    .font(.custom("Lato-Bold", size: 17))
                                     .multilineTextAlignment(.center)
                                 Text("0%")
                                     .foregroundColor(.white)
-                                    .font(.system(size: 45, weight: .bold, design: .default))
+                                    .font(.custom("Oswald-Regular_Bold", size: 70))
                                     .multilineTextAlignment(.center)
                             }
                             Spacer()
                             VStack{
                                 Text("RANK")
                                     .foregroundColor(.white)
-                                    .font(.system(size: 15))
+                                    .font(.custom("Lato-Bold", size: 17))
                                     .multilineTextAlignment(.center)
-                                Text("0")
+                                Text("1st")
                                     .foregroundColor(.white)
-                                    .font(.system(size: 45, weight: .bold, design: .default))
+                                    .font(.custom("Oswald-Regular_Bold", size: 70))
                                     .multilineTextAlignment(.center)
                             }
                             Spacer()
@@ -57,15 +57,18 @@ struct HomeView: View {
                         NavigationLink(
                             destination: PresentationViewSUI()
                                 .navigationBarHidden(true)
-                                .navigationBarBackButtonHidden(true),
+                                .navigationTitle("")
+                                .navigationBarBackButtonHidden(true)
+                                .ignoresSafeArea(),
                             label: {
                                 Image(systemName: "play.tv")
                                     .resizable()
                                     .frame(width: 100, height: 100, alignment: .center)
+                                    .foregroundColor(.white)
                             })
                         Text("PRACTICE PRESENTING")
                             .foregroundColor(.white)
-                            .font(.system(size: 15))
+                            .font(.custom("Montserrat-SemiBold", size: 20))
                             .multilineTextAlignment(.center)
                         Spacer()
                     }
@@ -81,6 +84,7 @@ struct HomeView: View {
                 }, label: {
                     Image(systemName:"arrow.right.circle.fill")
                 }))
+                .foregroundColor(.white)
             }
             .navigationBarHidden(true)
             .navigationBarBackButtonHidden(true)

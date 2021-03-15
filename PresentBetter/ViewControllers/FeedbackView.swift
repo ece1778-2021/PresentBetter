@@ -1,4 +1,5 @@
 import ARKit
+import SwiftUI
 import UIKit
 
 class FeedbackViewController: UIViewController {
@@ -52,7 +53,15 @@ class FeedbackViewController: UIViewController {
     }
     
     @IBAction func btnHomeClicked(_ sender: UIButton) {
-        navigationController?.popToRootViewController(animated: true)
+        if let window = UIApplication.shared.windows.first {
+            window.rootViewController = UIHostingController(rootView: ContentView())
+            window.makeKeyAndVisible()
+            UIView.transition(with: window,
+                                  duration: 0.3,
+                                  options: .transitionFlipFromLeft,
+                                  animations: nil,
+                                  completion: nil)
+        }
     }
     
     func calculateFacialExpressionScore() -> (Int, String) {

@@ -14,7 +14,6 @@
 		14DE2E9425F782050064982A /* SignupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DE2E8E25F782050064982A /* SignupView.swift */; };
 		14DE2E9525F782050064982A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DE2E8F25F782050064982A /* ContentView.swift */; };
 		14DE2EAC25F786E20064982A /* KeyboardAvoid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DE2EAB25F786E20064982A /* KeyboardAvoid.swift */; };
-		14DE2EB025F7878E0064982A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DE2EAF25F7878E0064982A /* SceneDelegate.swift */; };
 		14DE2EB325F7881D0064982A /* PresentBetterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DE2EB225F7881D0064982A /* PresentBetterApp.swift */; };
 		3E7535684384A1302C799024 /* Pods_PresentBetter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3011A6E479955BD9FE8E02C9 /* Pods_PresentBetter.framework */; };
 		E50160AF25E827BF0040966F /* Spartan-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E50160AE25E827BF0040966F /* Spartan-Bold.ttf */; };
@@ -28,8 +27,8 @@
 		E5914D8325E7577B009A0BC0 /* Now-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = E5914D8225E7577B009A0BC0 /* Now-Medium.otf */; };
 		E5914D8625E758D0009A0BC0 /* Oswald-VariableFont_wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E5914D8525E758D0009A0BC0 /* Oswald-VariableFont_wght.ttf */; };
 		E5914D8925E75941009A0BC0 /* Lato-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E5914D8825E75941009A0BC0 /* Lato-Bold.ttf */; };
-		E59A21A025D89CE5009E0082 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59A219F25D89CE5009E0082 /* AppDelegate.swift */; };
-		E59A21A225D89CE5009E0082 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59A21A125D89CE5009E0082 /* SceneDelegate.swift */; };
+		E59A21A025D89CE5009E0082 /* (null) in Sources */ = {isa = PBXBuildFile; };
+		E59A21A225D89CE5009E0082 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		E59A21A425D89CE5009E0082 /* PresentationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59A21A325D89CE5009E0082 /* PresentationView.swift */; };
 		E59A21A725D89CE5009E0082 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E59A21A525D89CE5009E0082 /* Main.storyboard */; };
 		E59A21A925D89CE7009E0082 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E59A21A825D89CE7009E0082 /* Assets.xcassets */; };
@@ -42,6 +41,8 @@
 		E5DEE73825EB0AB900BE0E1F /* FacialExpression.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DEE73725EB0AB900BE0E1F /* FacialExpression.swift */; };
 		E5DEE73C25EB145600BE0E1F /* ShapeArt.png in Resources */ = {isa = PBXBuildFile; fileRef = E5134B5625E835410098C7E6 /* ShapeArt.png */; };
 		E5DEE73D25EB145900BE0E1F /* PresentBetter.png in Resources */ = {isa = PBXBuildFile; fileRef = E5134B5225E833C50098C7E6 /* PresentBetter.png */; };
+		E5F94B4825FEF0E600F9DCD5 /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E5F94B4725FEF0E600F9DCD5 /* Montserrat-Bold.ttf */; };
+		E5F94B4B25FEF60600F9DCD5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F94B4A25FEF60600F9DCD5 /* SceneDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,7 +53,6 @@
 		14DE2E8E25F782050064982A /* SignupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupView.swift; sourceTree = "<group>"; };
 		14DE2E8F25F782050064982A /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		14DE2EAB25F786E20064982A /* KeyboardAvoid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardAvoid.swift; sourceTree = "<group>"; };
-		14DE2EAF25F7878E0064982A /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		14DE2EB225F7881D0064982A /* PresentBetterApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresentBetterApp.swift; sourceTree = "<group>"; };
 		251BDF58DAC6DB81C6385110 /* Pods-PresentBetter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PresentBetter.release.xcconfig"; path = "Target Support Files/Pods-PresentBetter/Pods-PresentBetter.release.xcconfig"; sourceTree = "<group>"; };
 		3011A6E479955BD9FE8E02C9 /* Pods_PresentBetter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PresentBetter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -82,6 +82,8 @@
 		E5DEE72F25EA967F00BE0E1F /* EyeTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeTrack.swift; sourceTree = "<group>"; };
 		E5DEE73225EABB1400BE0E1F /* HandPose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandPose.swift; sourceTree = "<group>"; };
 		E5DEE73725EB0AB900BE0E1F /* FacialExpression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacialExpression.swift; sourceTree = "<group>"; };
+		E5F94B4725FEF0E600F9DCD5 /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Bold.ttf"; sourceTree = "<group>"; };
+		E5F94B4A25FEF60600F9DCD5 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,8 +162,7 @@
 		E5134B5F25E84AD70098C7E6 /* Delegates */ = {
 			isa = PBXGroup;
 			children = (
-				E59A219F25D89CE5009E0082 /* AppDelegate.swift */,
-				E59A21A125D89CE5009E0082 /* SceneDelegate.swift */,
+				E5F94B4A25FEF60600F9DCD5 /* SceneDelegate.swift */,
 			);
 			path = Delegates;
 			sourceTree = "<group>";
@@ -176,6 +177,7 @@
 				E5914D8525E758D0009A0BC0 /* Oswald-VariableFont_wght.ttf */,
 				E5914D8825E75941009A0BC0 /* Lato-Bold.ttf */,
 				E50160AE25E827BF0040966F /* Spartan-Bold.ttf */,
+				E5F94B4725FEF0E600F9DCD5 /* Montserrat-Bold.ttf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -202,7 +204,6 @@
 			isa = PBXGroup;
 			children = (
 				14DE2E8925F782050064982A /* BasicUI */,
-				E5B7DDE025DA43CF00EBE2E5 /* emotion_image_input.mlmodel */,
 				14DE2EB225F7881D0064982A /* PresentBetterApp.swift */,
 				E5134B5F25E84AD70098C7E6 /* Delegates */,
 				E5134B5E25E84ABE0098C7E6 /* Processors */,
@@ -294,6 +295,7 @@
 				14DE2E8725F781BE0064982A /* GoogleService-Info.plist in Resources */,
 				E5DEE73C25EB145600BE0E1F /* ShapeArt.png in Resources */,
 				E5914D7D25E752D5009A0BC0 /* Now-Bold.otf in Resources */,
+				E5F94B4825FEF0E600F9DCD5 /* Montserrat-Bold.ttf in Resources */,
 				E5914D7A25E7516F009A0BC0 /* Now-Regular.otf in Resources */,
 				E5914D8625E758D0009A0BC0 /* Oswald-VariableFont_wght.ttf in Resources */,
 				E59A21A925D89CE7009E0082 /* Assets.xcassets in Resources */,
@@ -360,12 +362,13 @@
 				14DE2E9325F782050064982A /* PresentationViewSUI.swift in Sources */,
 				14DE2EAC25F786E20064982A /* KeyboardAvoid.swift in Sources */,
 				E53AE92125E811F300479BF1 /* PresentationPreparationView.swift in Sources */,
+				E5F94B4B25FEF60600F9DCD5 /* SceneDelegate.swift in Sources */,
 				E59A21A425D89CE5009E0082 /* PresentationView.swift in Sources */,
 				E5134B5A25E83A6F0098C7E6 /* AlertView.swift in Sources */,
 				E53996D925E99C2D00F38FE2 /* EyeCalibrationView.swift in Sources */,
 				E5DEE73825EB0AB900BE0E1F /* FacialExpression.swift in Sources */,
-				E59A21A025D89CE5009E0082 /* AppDelegate.swift in Sources */,
-				E59A21A225D89CE5009E0082 /* SceneDelegate.swift in Sources */,
+				E59A21A025D89CE5009E0082 /* (null) in Sources */,
+				E59A21A225D89CE5009E0082 /* (null) in Sources */,
 				E5B7DDE125DA43CF00EBE2E5 /* emotion_image_input.mlmodel in Sources */,
 				E5DEE73025EA967F00BE0E1F /* EyeTrack.swift in Sources */,
 				E53AE91E25E80BF400479BF1 /* CustomGraphics.swift in Sources */,

@@ -35,7 +35,7 @@ class Eye {
         geometry.radialSegmentCount = 3
         let eyeNode = SCNNode()
         eyeNode.geometry = geometry
-        geometry.firstMaterial?.diffuse.contents = UIColor.red
+        //geometry.firstMaterial?.diffuse.contents = UIColor.red
         eyeNode.eulerAngles.x = -.pi / 2
         eyeNode.position.z = 0.1
         
