@@ -61,8 +61,9 @@ struct HomeView: View {
                                 .navigationBarBackButtonHidden(true)
                                 .ignoresSafeArea(),
                             label: {
-                                Image(systemName: "play.tv")
+                                Image("Present")
                                     .resizable()
+                                    .aspectRatio(contentMode: .fit)
                                     .frame(width: 100, height: 100, alignment: .center)
                                     .foregroundColor(.white)
                             })

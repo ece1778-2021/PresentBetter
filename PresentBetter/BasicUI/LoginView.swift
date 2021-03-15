@@ -39,33 +39,33 @@ struct LoginView: View {
                                 .font(.custom("Montserrat-Bold", size: 45))
                                 .multilineTextAlignment(.center)
                             HStack{
-                                Image(systemName: "person")
+                                Image("User")
                                     .resizable()
+                                    .aspectRatio(contentMode: .fit)
                                     .frame(width: 30, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                                     .foregroundColor(.white)
-                                    .aspectRatio(contentMode: .fit)
                                     .padding(.leading, 30)
                                 TextField("", text: $email)
                                     .font(Font.custom("Montserrat-SemiBold", size: 20))
                                     .frame(height: 45)
-                                    .cornerRadius(5)
                                     .background(Color.white)
                                     .autocapitalization(.none)
+                                    .cornerRadius(10)
                                     .padding(.trailing, 30)
                             }
                             HStack{
-                                Image(systemName: "lock")
+                                Image("Password")
                                     .resizable()
+                                    .aspectRatio(contentMode: .fit)
                                     .frame(width: 30, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                                     .foregroundColor(.white)
-                                    .aspectRatio(contentMode: .fit)
                                     .padding(.leading, 30)
                                 SecureField("", text: $password)
                                     .font(Font.custom("Montserrat-SemiBold", size: 20))
                                     .frame(height: 45)
-                                    .cornerRadius(5)
                                     .background(Color.white)
                                     .autocapitalization(.none)
+                                    .cornerRadius(10)
                                     .padding(.trailing, 30)
                             }
                         }
@@ -75,7 +75,7 @@ struct LoginView: View {
                             isActive: $isLogin,
                             label: {
                                 Button(action: login){
-                                    Text("Sign in")
+                                    Text("SIGN IN")
                                         .foregroundColor(lightBlueColor)
                                         .font(.custom("Montserrat-SemiBold", size: 20))
                                 }
@@ -86,14 +86,14 @@ struct LoginView: View {
                             })
                             .frame(width: 150, height: 50, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                             .clipped()
-                            .cornerRadius(30)
                             .background(Color.white)
+                            .cornerRadius(25)
                             .padding(.bottom, 10.0)
                         
                         NavigationLink(
                             destination: SignupView(),
                             label: {
-                                Text("Sign Up?")
+                                Text("SIGN UP?")
                                     .foregroundColor(.white)
                                     .font(.custom("Montserrat-SemiBold", size: 20))
                             })

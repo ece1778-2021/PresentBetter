@@ -35,7 +35,12 @@ class Eye {
         geometry.radialSegmentCount = 3
         let eyeNode = SCNNode()
         eyeNode.geometry = geometry
-        //geometry.firstMaterial?.diffuse.contents = UIColor.red
+        
+        if !hidden {
+            geometry.firstMaterial?.diffuse.contents = UIColor.red
+        } else {
+            geometry.firstMaterial?.diffuse.contents = UIColor.clear
+        }
         eyeNode.eulerAngles.x = -.pi / 2
         eyeNode.position.z = 0.1
         
@@ -65,8 +70,8 @@ class EyeContactSession {
     var devicePlane: Device
     
     init(currentScene: SCNScene) {
-        leftEye = Eye()
-        rightEye = Eye()
+        leftEye = Eye(hidden: true)
+        rightEye = Eye(hidden: true)
         devicePlane = Device()
         currentScene.rootNode.addChildNode(devicePlane.node)
     }

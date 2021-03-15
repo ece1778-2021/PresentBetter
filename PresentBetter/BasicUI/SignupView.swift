@@ -13,6 +13,8 @@ enum ActiveAlert {
 }
 
 struct SignupView: View {
+    @Environment(\.presentationMode) var mode: Binding<PresentationMode>
+    
     @State private var email = ""
     @State private var password = ""
     @State private var error: String = ""
@@ -21,72 +23,109 @@ struct SignupView: View {
     @State private var activeAlert: ActiveAlert = .first
     
     let lightBlueColor = Color(red: 0.0/255.0, green: 224.0/255.0, blue: 249.0/255.0)
+    let pinkColor = Color(red: 253.0/255.0, green: 151.0/255.0, blue: 143.0/255.0)
     
     var body: some View {
-        VStack{
-            Spacer()
-            Text("Sign Up")
-                .foregroundColor(.white)
-                .font(.system(size: 45, weight: .bold, design: .default))
-                .multilineTextAlignment(.center)
-            Spacer()
-            HStack{
-                Image(systemName: "person")
-                    .resizable()
-                    .frame(width: 30, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                    .padding(.leading)
-                TextField("", text: $email)
-                    .font(Font.custom("Arial", size: 40))
-                    .cornerRadius(5)
-                    .background(Color.white)
-                    .autocapitalization(.none)
-                    .padding(.trailing)
-            }
-            HStack{
-                Image(systemName: "lock")
-                    .resizable()
-                    .frame(width: 30, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                    .padding(.leading)
-                SecureField("", text: $password)
-                    .font(Font.custom("Arial", size: 40))
-                    .cornerRadius(5)
-                    .background(Color.white)
-                    .autocapitalization(.none)
-                    .padding(.trailing)
-            }
-            Spacer()
-            NavigationLink(
-                destination: HomeView(),
-                isActive: $isSigned,
-                label: {
-                    Button(action: check){
-                        Text("Sign Up")
-                            .foregroundColor(lightBlueColor)
-                            .font(.system(size: 20, weight: .bold, design: .default))
-                    }
-                    .alert(isPresented: $showAlert){
-                        switch activeAlert{
-                        case .first:
-                            return Alert(title: Text("Please fill out the blank area!"))
-                        case .second:
-                            return Alert(title: Text("Two passwords do not match!"))
-                        case .third:
-                            return Alert(title: Text("Please set up a picture!"))
-                        case .forth:
-                            return Alert(title: Text(self.error))
+        NavigationView {
+            VStack{
+                ZStack {
+                    VStack {
+                        GeometryReader { geometry in
+                            Image("ShapeArt")
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(height: geometry.size.height / 2)
                         }
                     }
-                })
-                .frame(width: 150, height: 50, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                .clipped()
-                .cornerRadius(30)
-                .background(Color.white)
-                .padding(.bottom, 3.0)
-            Spacer()
+                    VStack {
+                        Spacer()
+                        Spacer()
+                        Text("REGISTER\nPB ACCOUNT")
+                            .foregroundColor(.white)
+                            .font(.custom("Montserrat-Bold", size: 45))
+                            .multilineTextAlignment(.center)
+                        Spacer()
+                        HStack{
+                            Image("User")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 30, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                                .foregroundColor(.white)
+                                .padding(.leading, 30)
+                            TextField("", text: $email)
+                                .font(Font.custom("Montserrat-SemiBold", size: 20))
+                                .frame(height: 45)
+                                .background(Color.white)
+                                .autocapitalization(.none)
+                                .cornerRadius(10)
+                                .padding(.trailing, 30)
+                        }
+                        HStack{
+                            Image("Password")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 30, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                                .foregroundColor(.white)
+                                .padding(.leading, 30)
+                            SecureField("", text: $password)
+                                .font(Font.custom("Montserrat-SemiBold", size: 20))
+                                .frame(height: 45)
+                                .background(Color.white)
+                                .autocapitalization(.none)
+                                .cornerRadius(10)
+                                .padding(.trailing, 30)
+                        }
+                        Spacer()
+                        NavigationLink(
+                            destination: HomeView(),
+                            isActive: $isSigned,
+                            label: {
+                                Button(action: check){
+                                    Text("JOIN!")
+                                        .foregroundColor(lightBlueColor)
+                                        .font(.custom("Montserrat-SemiBold", size: 20))
+                                }
+                                .alert(isPresented: $showAlert){
+                                    switch activeAlert{
+                                    case .first:
+                                        return Alert(title: Text("Please fill out the blank area!"))
+                                    case .second:
+                                        return Alert(title: Text("Two passwords do not match!"))
+                                    case .third:
+                                        return Alert(title: Text("Please set up a picture!"))
+                                    case .forth:
+                                        return Alert(title: Text(self.error))
+                                    }
+                                }
+                            })
+                            .frame(width: 150, height: 50, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                            .clipped()
+                            .background(Color.white)
+                            .cornerRadius(25)
+                        Spacer()
+                    }
+                }
+            }
+            .adaptsToKeyboard()
+            .background(pinkColor)
+            .ignoresSafeArea()
+            .navigationBarItems(leading: Button(action: {
+                self.mode.wrappedValue.dismiss()
+            }, label: {
+                Text("BACK")
+                    .frame(width: 100, height: 35, alignment: .center)
+                    .foregroundColor(.white)
+                    .font(.custom("MontSerrat-SemiBold", size: 22))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(Color.white, lineWidth: 2)
+                    )
+                    .padding(.top, 30)
+                    .padding(.leading, 15)
+            }))
         }
-        .adaptsToKeyboard()
-        .background(lightBlueColor)
-        .ignoresSafeArea()
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
     }
     func check() {
         if email.isEmpty||password.isEmpty{
