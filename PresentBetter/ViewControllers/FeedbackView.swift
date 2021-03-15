@@ -56,11 +56,7 @@ class FeedbackViewController: UIViewController {
         if let window = UIApplication.shared.windows.first {
             window.rootViewController = UIHostingController(rootView: ContentView())
             window.makeKeyAndVisible()
-            UIView.transition(with: window,
-                                  duration: 0.3,
-                                  options: .transitionFlipFromLeft,
-                                  animations: nil,
-                                  completion: nil)
+            UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: nil, completion: nil)
         }
     }
     

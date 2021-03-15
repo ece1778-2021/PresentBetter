@@ -54,19 +54,15 @@ struct HomeView: View {
                             Spacer()
                         }
                         Spacer()
-                        NavigationLink(
-                            destination: PresentationViewSUI()
-                                .navigationBarHidden(true)
-                                .navigationTitle("")
-                                .navigationBarBackButtonHidden(true)
-                                .ignoresSafeArea(),
-                            label: {
-                                Image("Present")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 100, height: 100, alignment: .center)
-                                    .foregroundColor(.white)
-                            })
+                        Button(action: {
+                            navigateToPresentationUI()
+                        }, label: {
+                            Image("Present")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 100, height: 100, alignment: .center)
+                                .foregroundColor(.white)
+                        })
                         Text("PRACTICE PRESENTING")
                             .foregroundColor(.white)
                             .font(.custom("Montserrat-SemiBold", size: 20))
@@ -87,8 +83,20 @@ struct HomeView: View {
                 }))
                 .foregroundColor(.white)
             }
+            .navigationTitle("")
             .navigationBarHidden(true)
             .navigationBarBackButtonHidden(true)
+        }
+    }
+    
+    func navigateToPresentationUI() {
+        if let window = UIApplication.shared.windows.first {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let viewController = storyboard.instantiateViewController(identifier: "RootNavigation")
+        
+            window.rootViewController = viewController
+            window.makeKeyAndVisible()
+            UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromRight, animations: nil, completion: nil)
         }
     }
 }

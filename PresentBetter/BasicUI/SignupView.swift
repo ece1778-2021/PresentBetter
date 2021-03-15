@@ -128,6 +128,7 @@ struct SignupView: View {
 
             }
             .navigationBarHidden(true)
+            .navigationTitle("")
             .navigationBarBackButtonHidden(true)
             
             if isLoading{

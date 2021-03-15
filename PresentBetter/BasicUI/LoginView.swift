@@ -88,6 +88,10 @@ struct LoginView: View {
                                 .cornerRadius(25)
                                 .padding(.bottom, 10.0)
                             
+                                .navigationTitle("")
+                                .navigationBarHidden(true)
+                                .navigationBarBackButtonHidden(true)
+                            
                             NavigationLink(
                                 destination: SignupView(),
                                 label: {
@@ -104,6 +108,7 @@ struct LoginView: View {
                     .ignoresSafeArea()
                 }
             }
+            .navigationTitle("")
             .navigationBarHidden(true)
             .navigationBarBackButtonHidden(true)
             
