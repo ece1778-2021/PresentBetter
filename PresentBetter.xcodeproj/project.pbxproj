@@ -15,6 +15,7 @@
 		14DE2E9525F782050064982A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DE2E8F25F782050064982A /* ContentView.swift */; };
 		14DE2EAC25F786E20064982A /* KeyboardAvoid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DE2EAB25F786E20064982A /* KeyboardAvoid.swift */; };
 		14DE2EB325F7881D0064982A /* PresentBetterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DE2EB225F7881D0064982A /* PresentBetterApp.swift */; };
+		14F6AA8525FF6F55004FE096 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F6AA8425FF6F55004FE096 /* LoadingView.swift */; };
 		3E7535684384A1302C799024 /* Pods_PresentBetter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3011A6E479955BD9FE8E02C9 /* Pods_PresentBetter.framework */; };
 		E50160AF25E827BF0040966F /* Spartan-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E50160AE25E827BF0040966F /* Spartan-Bold.ttf */; };
 		E5134B5A25E83A6F0098C7E6 /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5134B5925E83A6F0098C7E6 /* AlertView.swift */; };
@@ -54,6 +55,7 @@
 		14DE2E8F25F782050064982A /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		14DE2EAB25F786E20064982A /* KeyboardAvoid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardAvoid.swift; sourceTree = "<group>"; };
 		14DE2EB225F7881D0064982A /* PresentBetterApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresentBetterApp.swift; sourceTree = "<group>"; };
+		14F6AA8425FF6F55004FE096 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		251BDF58DAC6DB81C6385110 /* Pods-PresentBetter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PresentBetter.release.xcconfig"; path = "Target Support Files/Pods-PresentBetter/Pods-PresentBetter.release.xcconfig"; sourceTree = "<group>"; };
 		3011A6E479955BD9FE8E02C9 /* Pods_PresentBetter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PresentBetter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		808D0FBB614B4812650FC18C /* Pods-PresentBetter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PresentBetter.debug.xcconfig"; path = "Target Support Files/Pods-PresentBetter/Pods-PresentBetter.debug.xcconfig"; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 				14DE2E8E25F782050064982A /* SignupView.swift */,
 				14DE2E8F25F782050064982A /* ContentView.swift */,
 				14DE2EAB25F786E20064982A /* KeyboardAvoid.swift */,
+				14F6AA8425FF6F55004FE096 /* LoadingView.swift */,
 			);
 			path = BasicUI;
 			sourceTree = "<group>";
@@ -377,6 +380,7 @@
 				E5D2723E25E351400026CF41 /* FeedbackView.swift in Sources */,
 				14DE2EB325F7881D0064982A /* PresentBetterApp.swift in Sources */,
 				E5DEE73325EABB1400BE0E1F /* HandPose.swift in Sources */,
+				14F6AA8525FF6F55004FE096 /* LoadingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
