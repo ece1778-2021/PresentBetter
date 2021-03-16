@@ -212,6 +212,7 @@ PODS:
     - abseil/base/base_internal
     - abseil/base/config
     - abseil/meta/type_traits
+  - ARVideoKit (1.5.51)
   - BoringSSL-GRPC (0.0.7):
     - BoringSSL-GRPC/Implementation (= 0.0.7)
     - BoringSSL-GRPC/Interface (= 0.0.7)
@@ -303,12 +304,14 @@ PODS:
   - PromisesObjC (1.2.12)
 
 DEPENDENCIES:
+  - ARVideoKit (~> 1.5.51)
   - Firebase/Auth
   - Firebase/Firestore
 
 SPEC REPOS:
   trunk:
     - abseil
+    - ARVideoKit
     - BoringSSL-GRPC
     - Firebase
     - FirebaseAuth
@@ -326,6 +329,7 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
+  ARVideoKit: cd70e1e49e042ed4a88fb59964c17520e34f7f5b
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
   Firebase: 26223c695fe322633274198cb19dca8cb7e54416
   FirebaseAuth: c224a0cf1afa0949bd5c7bfcf154b4f5ce8ddef2
@@ -341,6 +345,6 @@ SPEC CHECKSUMS:
   nanopb: 1bf24dd71191072e120b83dd02d08f3da0d65e53
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
 
-PODFILE CHECKSUM: e2abedb365fbb2676b8a494e705d3a2d1125ab19
+PODFILE CHECKSUM: 3155aac1df2adacde03f885c537bcbd6bb9419c9
 
 COCOAPODS: 1.10.1

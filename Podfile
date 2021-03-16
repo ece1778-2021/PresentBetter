@@ -10,4 +10,6 @@ target 'PresentBetter' do
   # For example, to use Firebase Authentication and Cloud Firestore
   pod 'Firebase/Auth'
   pod 'Firebase/Firestore'
+
+  pod 'ARVideoKit', '~> 1.5.51'
 end

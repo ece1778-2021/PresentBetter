@@ -10,6 +10,7 @@ class FeedbackViewController: UIViewController {
     @IBOutlet var lblEyeContactScore: UILabel!
     @IBOutlet var lblEyeContactFeedback: UILabel!
     @IBOutlet var btnHome: UIButton!
+    @IBOutlet var btnPlayback: UIButton!
     @IBOutlet var totalScoreView: UIView!
     @IBOutlet var lblTotalScore: UILabel!
     @IBOutlet var lblRank: UILabel!
@@ -17,6 +18,8 @@ class FeedbackViewController: UIViewController {
     var totalSmiles = 0
     var totalHandMoves = 0
     var totalLooks = 0
+    
+    var videoURL: URL?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,6 +45,9 @@ class FeedbackViewController: UIViewController {
             lblEyeContactFeedback.text = "Tip: \(feedback)"
             view.addConstraint(NSLayoutConstraint(item: totalScoreView!, attribute: .top, relatedBy: .equal, toItem: lblEyeContactFeedback, attribute: .bottom, multiplier: 1, constant: 30))
         } else {
+            // Phones without TrueDepth camera will not support presentation video recording.
+            btnPlayback.isHidden = true
+            
             totalScore += 100
             lblEyeContactScore.isHidden = true
             lblEyeContactFeedback.isHidden = true
@@ -53,11 +59,23 @@ class FeedbackViewController: UIViewController {
     }
     
     @IBAction func btnHomeClicked(_ sender: UIButton) {
+        if let URL = videoURL {
+            do {
+                try FileManager.default.removeItem(at: URL)
+            } catch let e {
+                print(e)
+            }
+        }
+        
         if let window = UIApplication.shared.windows.first {
             window.rootViewController = UIHostingController(rootView: ContentView())
             window.makeKeyAndVisible()
             UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: nil, completion: nil)
         }
+    }
+    
+    @IBAction func btnPlaybackClicked(_ sender: UIButton) {
+        PlaybackViewController.showView(self, videoURL: videoURL)
     }
     
     func calculateFacialExpressionScore() -> (Int, String) {

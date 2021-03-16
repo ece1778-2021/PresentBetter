@@ -1,4 +1,5 @@
 import ARKit
+import ARVideoKit
 import AVFoundation
 import CoreML
 import UIKit
@@ -19,6 +20,8 @@ class PresentationViewController: UIViewController {
     @IBOutlet var lblCountdown: UILabel!
     @IBOutlet var lblPrepareCountdown: UILabel!
     @IBOutlet var countdownBackgroundView: UIView!
+    @IBOutlet var recordingIndicator: UIView!
+    @IBOutlet var recordingIndicatorView: UIView!
     
     // AVCaptureSession objects
     var captureSession: AVCaptureSession!
@@ -31,8 +34,11 @@ class PresentationViewController: UIViewController {
     
     // AR parameters
     var supportsDepthCamera = false
+    var hasMicrophoneAccess = false
     var lastARUpdateFrameTime: Date?    // Stores the last time ARSession updates its frame
     var tryStartPresentation = false
+    var recorder: RecordAR?
+    var videoURL: URL?
     
     // Indicates if AVCaptureSession configuration is successful
     var accessSuccessful = false
@@ -57,6 +63,7 @@ class PresentationViewController: UIViewController {
     
     // Performance metrics: Number of frames processed during a session
     var frames = 0
+    var indicatorTimer: Timer?
     
     // MARK: - View lifecycle
     
@@ -71,6 +78,9 @@ class PresentationViewController: UIViewController {
         roundRectLayer.fillColor = UIColor.clear.cgColor
         roundRectLayer.lineWidth = 2.0
         roundRectLayer.strokeColor = UIColor.red.cgColor
+        
+        recordingIndicatorView.isHidden = true
+        recordingIndicator.layer.cornerRadius = 5.0
         
         facialExpressionSession = FacialExpressionSession(boundingFrame: view.frame)
         handPoseSession = HandPoseSession()
@@ -95,8 +105,13 @@ class PresentationViewController: UIViewController {
         resetPresentationCountdown()
         DispatchQueue.main.async {
             if self.supportsDepthCamera {
-                self.tryStartPresentation = true
-                self.startARSession()
+                self.initializeAVAudio()
+                if self.hasMicrophoneAccess {
+                    self.tryStartPresentation = true
+                    self.startARSession()
+                } else {
+                    NoCameraViewController.showView(self)
+                }
             } else {
                 // Fallback to traditional AVCaptureSession if the device has no TrueDepth camera.
                 if self.configSuccessful {
@@ -116,6 +131,8 @@ class PresentationViewController: UIViewController {
         
         if supportsDepthCamera {
             sceneView.session.pause()
+            indicatorTimer?.invalidate()
+            recorder?.rest()
         } else {
             // Fallback to traditional AVCaptureSession if the device has no TrueDepth camera.
             captureSession.stopRunning()
@@ -135,11 +152,15 @@ class PresentationViewController: UIViewController {
         sceneView.delegate = self
         sceneView.session.delegate = self
         sceneView.preferredFramesPerSecond = 15
+        
+        recorder = RecordAR(ARSceneKit: sceneView)
     }
     
     func startARSession() {
         let config = ARFaceTrackingConfiguration()
         config.isLightEstimationEnabled = true
+        recorder?.prepare(config)
+        
         sceneView.session.run(config, options: [.resetTracking, .removeExistingAnchors])
     }
     
@@ -167,6 +188,27 @@ class PresentationViewController: UIViewController {
         DispatchQueue.main.async {
             self.configureCaptureSession()
         }
+    }
+    
+    func initializeAVAudio() {
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        switch AVAudioSession.sharedInstance().recordPermission {
+        case .granted:
+            hasMicrophoneAccess = true
+            semaphore.signal()
+        case .undetermined:
+            AVAudioSession.sharedInstance().requestRecordPermission() { granted in
+                if granted {
+                    self.hasMicrophoneAccess = true
+                }
+                semaphore.signal()
+            }
+        default:
+            semaphore.signal()
+        }
+        
+        _ = semaphore.wait(timeout: .distantFuture)
     }
     
     func configureCaptureSession() {
@@ -380,6 +422,7 @@ extension PresentationViewController {
             feedbackView.totalSmiles = totalSmiles
             feedbackView.totalHandMoves = totalHandMoves
             feedbackView.totalLooks = totalLooks
+            feedbackView.videoURL = videoURL
         }
     }
     
@@ -402,11 +445,24 @@ extension PresentationViewController {
         lblCountdown.text = "00:15"
     }
     
+    func resetRecordingIndicator() {
+        recordingIndicatorView.isHidden = true
+        recordingIndicator.isHidden = false
+    }
+    
+    func startRecordingIndicator() {
+        recordingIndicatorView.isHidden = false
+        
+        indicatorTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
+            self.recordingIndicator.isHidden = !self.recordingIndicator.isHidden
+        })
+    }
+    
     func startPresentationCountdown() {
         lblPrepareCountdown.text = "5"
         lblPrepareCountdown.isHidden = false
         
-        let _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: prepareCountdown)
+        let _ = Timer.scheduledTimer(withTimeInterval: 0.8, repeats: true, block: prepareCountdown)
     }
     
     func prepareCountdown(timer: Timer) {
@@ -417,6 +473,11 @@ extension PresentationViewController {
             timer.invalidate()
             lblPrepareCountdown.isHidden = true
             countdownBackgroundView.isHidden = false
+            
+            if supportsDepthCamera {
+                startRecordingIndicator()
+                recorder?.record()
+            }
             
             countdown = 30
             state = .presenting
@@ -448,7 +509,14 @@ extension PresentationViewController {
         
         if countdown == 0 {
             timer.invalidate()
-            performSegue(withIdentifier: "forwardToFeedback", sender: self)
+            
+            recorder?.stop() { videoURL in
+                DispatchQueue.main.async {
+                    print(videoURL)
+                    self.videoURL = videoURL
+                    self.performSegue(withIdentifier: "forwardToFeedback", sender: self)
+                }
+            }
         }
     }
 }

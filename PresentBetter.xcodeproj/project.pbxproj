@@ -42,6 +42,8 @@
 		E5DEE73825EB0AB900BE0E1F /* FacialExpression.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DEE73725EB0AB900BE0E1F /* FacialExpression.swift */; };
 		E5DEE73C25EB145600BE0E1F /* ShapeArt.png in Resources */ = {isa = PBXBuildFile; fileRef = E5134B5625E835410098C7E6 /* ShapeArt.png */; };
 		E5DEE73D25EB145900BE0E1F /* PresentBetter.png in Resources */ = {isa = PBXBuildFile; fileRef = E5134B5225E833C50098C7E6 /* PresentBetter.png */; };
+		E5E38A22260148FC00571727 /* PlaybackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E38A21260148FC00571727 /* PlaybackView.swift */; };
+		E5E38A2626014E3D00571727 /* monkey.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = E5E38A2526014E3D00571727 /* monkey.mp4 */; };
 		E5F94B4825FEF0E600F9DCD5 /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E5F94B4725FEF0E600F9DCD5 /* Montserrat-Bold.ttf */; };
 		E5F94B4B25FEF60600F9DCD5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F94B4A25FEF60600F9DCD5 /* SceneDelegate.swift */; };
 /* End PBXBuildFile section */
@@ -84,6 +86,8 @@
 		E5DEE72F25EA967F00BE0E1F /* EyeTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeTrack.swift; sourceTree = "<group>"; };
 		E5DEE73225EABB1400BE0E1F /* HandPose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandPose.swift; sourceTree = "<group>"; };
 		E5DEE73725EB0AB900BE0E1F /* FacialExpression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacialExpression.swift; sourceTree = "<group>"; };
+		E5E38A21260148FC00571727 /* PlaybackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackView.swift; sourceTree = "<group>"; };
+		E5E38A2526014E3D00571727 /* monkey.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = monkey.mp4; sourceTree = "<group>"; };
 		E5F94B4725FEF0E600F9DCD5 /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Bold.ttf"; sourceTree = "<group>"; };
 		E5F94B4A25FEF60600F9DCD5 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -135,6 +139,7 @@
 			isa = PBXGroup;
 			children = (
 				E5134B5925E83A6F0098C7E6 /* AlertView.swift */,
+				E5E38A21260148FC00571727 /* PlaybackView.swift */,
 				E53996D825E99C2D00F38FE2 /* EyeCalibrationView.swift */,
 				E5D2723D25E351400026CF41 /* FeedbackView.swift */,
 				E59A21A325D89CE5009E0082 /* PresentationView.swift */,
@@ -220,6 +225,7 @@
 				E59A21AA25D89CE7009E0082 /* LaunchScreen.storyboard */,
 				E59A21AD25D89CE7009E0082 /* Info.plist */,
 				14DE2E8625F781BE0064982A /* GoogleService-Info.plist */,
+				E5E38A2526014E3D00571727 /* monkey.mp4 */,
 			);
 			path = PresentBetter;
 			sourceTree = "<group>";
@@ -294,6 +300,7 @@
 			files = (
 				E5914D8025E7540A009A0BC0 /* Montserrat-SemiBold.ttf in Resources */,
 				E5914D8325E7577B009A0BC0 /* Now-Medium.otf in Resources */,
+				E5E38A2626014E3D00571727 /* monkey.mp4 in Resources */,
 				E59A21AC25D89CE7009E0082 /* LaunchScreen.storyboard in Resources */,
 				14DE2E8725F781BE0064982A /* GoogleService-Info.plist in Resources */,
 				E5DEE73C25EB145600BE0E1F /* ShapeArt.png in Resources */,
@@ -365,6 +372,7 @@
 				14DE2E9325F782050064982A /* PresentationViewSUI.swift in Sources */,
 				14DE2EAC25F786E20064982A /* KeyboardAvoid.swift in Sources */,
 				E53AE92125E811F300479BF1 /* PresentationPreparationView.swift in Sources */,
+				E5E38A22260148FC00571727 /* PlaybackView.swift in Sources */,
 				E5F94B4B25FEF60600F9DCD5 /* SceneDelegate.swift in Sources */,
 				E59A21A425D89CE5009E0082 /* PresentationView.swift in Sources */,
 				E5134B5A25E83A6F0098C7E6 /* AlertView.swift in Sources */,
