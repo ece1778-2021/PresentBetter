@@ -37,7 +37,7 @@ class Eye {
         eyeNode.geometry = geometry
         
         if !hidden {
-            geometry.firstMaterial?.diffuse.contents = UIColor.red
+            geometry.firstMaterial?.diffuse.contents = UIColor.lightGray
         } else {
             geometry.firstMaterial?.diffuse.contents = UIColor.clear
         }
@@ -69,9 +69,9 @@ class EyeContactSession {
     var leftEye: Eye, rightEye: Eye
     var devicePlane: Device
     
-    init(currentScene: SCNScene) {
-        leftEye = Eye(hidden: true)
-        rightEye = Eye(hidden: true)
+    init(currentScene: SCNScene, hideLaser: Bool = true) {
+        leftEye = Eye(hidden: hideLaser)
+        rightEye = Eye(hidden: hideLaser)
         devicePlane = Device()
         currentScene.rootNode.addChildNode(devicePlane.node)
     }

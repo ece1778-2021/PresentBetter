@@ -34,9 +34,13 @@
 		E59A21A725D89CE5009E0082 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E59A21A525D89CE5009E0082 /* Main.storyboard */; };
 		E59A21A925D89CE7009E0082 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E59A21A825D89CE7009E0082 /* Assets.xcassets */; };
 		E59A21AC25D89CE7009E0082 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E59A21AA25D89CE7009E0082 /* LaunchScreen.storyboard */; };
+		E5ABA5CF2606B5E9007E7278 /* AreaSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5ABA5CE2606B5E9007E7278 /* AreaSelectionView.swift */; };
 		E5B7DDE125DA43CF00EBE2E5 /* emotion_image_input.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = E5B7DDE025DA43CF00EBE2E5 /* emotion_image_input.mlmodel */; };
 		E5B7DDE425DAC49100EBE2E5 /* MLProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B7DDE325DAC49100EBE2E5 /* MLProvider.swift */; };
+		E5D1B144260801C9002CD603 /* TrainingResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5D1B143260801C9002CD603 /* TrainingResultView.swift */; };
 		E5D2723E25E351400026CF41 /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5D2723D25E351400026CF41 /* FeedbackView.swift */; };
+		E5D427602607ECAF00714D7A /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E5D4275F2607ECAF00714D7A /* Montserrat-Regular.ttf */; };
+		E5D427632607EF1400714D7A /* PresentationTipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5D427622607EF1400714D7A /* PresentationTipView.swift */; };
 		E5DEE73025EA967F00BE0E1F /* EyeTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DEE72F25EA967F00BE0E1F /* EyeTrack.swift */; };
 		E5DEE73325EABB1400BE0E1F /* HandPose.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DEE73225EABB1400BE0E1F /* HandPose.swift */; };
 		E5DEE73825EB0AB900BE0E1F /* FacialExpression.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DEE73725EB0AB900BE0E1F /* FacialExpression.swift */; };
@@ -80,9 +84,13 @@
 		E59A21A825D89CE7009E0082 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E59A21AB25D89CE7009E0082 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E59A21AD25D89CE7009E0082 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E5ABA5CE2606B5E9007E7278 /* AreaSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AreaSelectionView.swift; sourceTree = "<group>"; };
 		E5B7DDE025DA43CF00EBE2E5 /* emotion_image_input.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = emotion_image_input.mlmodel; sourceTree = "<group>"; };
 		E5B7DDE325DAC49100EBE2E5 /* MLProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLProvider.swift; sourceTree = "<group>"; };
+		E5D1B143260801C9002CD603 /* TrainingResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingResultView.swift; sourceTree = "<group>"; };
 		E5D2723D25E351400026CF41 /* FeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackView.swift; sourceTree = "<group>"; };
+		E5D4275F2607ECAF00714D7A /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Regular.ttf"; sourceTree = "<group>"; };
+		E5D427622607EF1400714D7A /* PresentationTipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationTipView.swift; sourceTree = "<group>"; };
 		E5DEE72F25EA967F00BE0E1F /* EyeTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeTrack.swift; sourceTree = "<group>"; };
 		E5DEE73225EABB1400BE0E1F /* HandPose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandPose.swift; sourceTree = "<group>"; };
 		E5DEE73725EB0AB900BE0E1F /* FacialExpression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacialExpression.swift; sourceTree = "<group>"; };
@@ -144,6 +152,9 @@
 				E5D2723D25E351400026CF41 /* FeedbackView.swift */,
 				E59A21A325D89CE5009E0082 /* PresentationView.swift */,
 				E53AE92025E811F300479BF1 /* PresentationPreparationView.swift */,
+				E5ABA5CE2606B5E9007E7278 /* AreaSelectionView.swift */,
+				E5D427622607EF1400714D7A /* PresentationTipView.swift */,
+				E5D1B143260801C9002CD603 /* TrainingResultView.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -186,6 +197,7 @@
 				E5914D8825E75941009A0BC0 /* Lato-Bold.ttf */,
 				E50160AE25E827BF0040966F /* Spartan-Bold.ttf */,
 				E5F94B4725FEF0E600F9DCD5 /* Montserrat-Bold.ttf */,
+				E5D4275F2607ECAF00714D7A /* Montserrat-Regular.ttf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -298,6 +310,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E5D427602607ECAF00714D7A /* Montserrat-Regular.ttf in Resources */,
 				E5914D8025E7540A009A0BC0 /* Montserrat-SemiBold.ttf in Resources */,
 				E5914D8325E7577B009A0BC0 /* Now-Medium.otf in Resources */,
 				E5E38A2626014E3D00571727 /* monkey.mp4 in Resources */,
@@ -380,15 +393,18 @@
 				E5DEE73825EB0AB900BE0E1F /* FacialExpression.swift in Sources */,
 				E59A21A025D89CE5009E0082 /* (null) in Sources */,
 				E59A21A225D89CE5009E0082 /* (null) in Sources */,
+				E5D1B144260801C9002CD603 /* TrainingResultView.swift in Sources */,
 				E5B7DDE125DA43CF00EBE2E5 /* emotion_image_input.mlmodel in Sources */,
 				E5DEE73025EA967F00BE0E1F /* EyeTrack.swift in Sources */,
 				E53AE91E25E80BF400479BF1 /* CustomGraphics.swift in Sources */,
+				E5D427632607EF1400714D7A /* PresentationTipView.swift in Sources */,
 				E5B7DDE425DAC49100EBE2E5 /* MLProvider.swift in Sources */,
 				14DE2E9425F782050064982A /* SignupView.swift in Sources */,
 				E5D2723E25E351400026CF41 /* FeedbackView.swift in Sources */,
 				14DE2EB325F7881D0064982A /* PresentBetterApp.swift in Sources */,
 				E5DEE73325EABB1400BE0E1F /* HandPose.swift in Sources */,
 				14F6AA8525FF6F55004FE096 /* LoadingView.swift in Sources */,
+				E5ABA5CF2606B5E9007E7278 /* AreaSelectionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

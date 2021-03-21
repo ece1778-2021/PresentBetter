@@ -1,6 +1,12 @@
 import ARKit
+import Firebase
 import SwiftUI
 import UIKit
+
+enum FeedbackMode {
+    case new
+    case viewExisting
+}
 
 class FeedbackViewController: UIViewController {
     @IBOutlet var lblFacialExpressionScore: UILabel!
@@ -19,6 +25,7 @@ class FeedbackViewController: UIViewController {
     var totalHandMoves = 0
     var totalLooks = 0
     
+    var mode: FeedbackMode = .new
     var videoURL: URL?
     
     override func viewDidLoad() {
@@ -27,22 +34,37 @@ class FeedbackViewController: UIViewController {
         navigationController?.setNavigationBarHidden(true, animated: false)
         btnHome.layer.cornerRadius = 15.0
         
+        if mode == .new && videoURL != nil {
+            videoURL = processRecordedVideo(originalURL: videoURL!, timestamp: Date())
+        }
+        
         var totalScore = 0, avgScore = 0
         var score = 0, feedback = ""
         (score, feedback) = calculateFacialExpressionScore()
         totalScore += score
         lblFacialExpressionScore.text = "\(score)%"
         lblFacialExpressionFeedback.text = "Tip: \(feedback)"
+        lblFacialExpressionFeedback.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showFacialExpressionTip)))
+        lblFacialExpressionFeedback.isUserInteractionEnabled = true
         (score, feedback) = calculateGestureScore()
         totalScore += score
         lblGesturesScore.text = "\(score)%"
         lblGesturesFeedback.text = "Tip: \(feedback)"
+        lblGesturesFeedback.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showGestureTip)))
+        lblGesturesFeedback.isUserInteractionEnabled = true
         
         if ARFaceTrackingConfiguration.isSupported {
+            btnPlayback.isHidden = true
+            if let _ = videoURL {
+                btnPlayback.isHidden = false
+            }
+            
             (score, feedback) = calculateEyeContactScore()
             totalScore += score
             lblEyeContactScore.text = "\(score)%"
             lblEyeContactFeedback.text = "Tip: \(feedback)"
+            lblEyeContactFeedback.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showEyeContactTip)))
+            lblEyeContactFeedback.isUserInteractionEnabled = true
             view.addConstraint(NSLayoutConstraint(item: totalScoreView!, attribute: .top, relatedBy: .equal, toItem: lblEyeContactFeedback, attribute: .bottom, multiplier: 1, constant: 30))
         } else {
             // Phones without TrueDepth camera will not support presentation video recording.
@@ -75,7 +97,61 @@ class FeedbackViewController: UIViewController {
     }
     
     @IBAction func btnPlaybackClicked(_ sender: UIButton) {
+        NotificationCenter.default.removeObserver(self)
+        NotificationCenter.default.addObserver(self, selector: #selector(videoDeleted), name: Notification.presentationVideoDeleted, object: nil)
         PlaybackViewController.showView(self, videoURL: videoURL)
+    }
+    
+    @objc func videoDeleted() {
+        NotificationCenter.default.removeObserver(self)
+        videoURL = nil
+        btnPlayback.isHidden = true
+    }
+    
+    @objc func showFacialExpressionTip() {
+        PresentationTipViewController.showView(self, mode: .facialExpression)
+    }
+    
+    @objc func showGestureTip() {
+        PresentationTipViewController.showView(self, mode: .gesture)
+    }
+    
+    @objc func showEyeContactTip() {
+        PresentationTipViewController.showView(self, mode: .eyeContact)
+    }
+    
+    func processRecordedVideo(originalURL: URL, timestamp: Date) -> URL? {
+        let documentRoots = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        guard let documentRoot = documentRoots.first else {
+            return nil
+        }
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd-HHmmss"
+        let dateString = formatter.string(from: timestamp)
+        
+        let newDir = documentRoot.appendingPathComponent("Videos")
+        do {
+            try FileManager.default.createDirectory(at: newDir, withIntermediateDirectories: true, attributes: nil)
+        } catch let e {
+            print(e)
+            return nil
+        }
+        
+        guard let UID = Auth.auth().currentUser?.uid else {
+            return nil
+        }
+        let newURL = newDir.appendingPathComponent("\(dateString)_\(UID).mp4")
+        print(newURL)
+        
+        do {
+            try FileManager.default.moveItem(at: originalURL, to: newURL)
+        } catch let e {
+            print(e)
+            return nil
+        }
+        
+        return newURL
     }
     
     func calculateFacialExpressionScore() -> (Int, String) {

@@ -32,6 +32,7 @@
 	<string>We need to use your camera to analyze your presentation.</string>
 	<key>UIAppFonts</key>
 	<array>
+		<string>Montserrat-Regular.ttf</string>
 		<string>Montserrat-Bold.ttf</string>
 		<string>Spartan-Bold.ttf</string>
 		<string>Lato-Bold.ttf</string>

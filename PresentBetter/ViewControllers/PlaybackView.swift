@@ -42,8 +42,23 @@ class PlaybackViewController: UIViewController {
     func shareVideo(videoURL: URL) {
         let activityItems: [Any] = [videoURL, "Check out my Practice Presenting videos! #PresentBetter"]
         let activityController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let loadingViewController = storyboard.instantiateViewController(withIdentifier: "LoadingViewController") as? LoadingViewController else {
+            return
+        }
+        addChild(loadingViewController)
+        loadingViewController.view.frame = view.bounds
+        view.addSubview(loadingViewController.view)
+        loadingViewController.didMove(toParent: self)
+        loadingViewController.viewWillAppear(true)
+        
         present(activityController, animated: true) {
-            print("presented!")
+            loadingViewController.myViewWillDisappear {
+                loadingViewController.didMove(toParent: nil)
+                loadingViewController.view.removeFromSuperview()
+                loadingViewController.removeFromParent()
+            }
         }
     }
     
@@ -81,6 +96,18 @@ class PlaybackViewController: UIViewController {
         }
     }
     
+    func deleteVideo(videoURL: URL?, completion: (() -> Void)?) {
+        if let URL = videoURL {
+            do {
+                try FileManager.default.removeItem(at: URL)
+                print("Deleted!")
+            } catch let e {
+                print(e)
+            }
+            completion?()
+        }
+    }
+    
     @objc func closeView() {
         dismiss(animated: true, completion: nil)
     }
@@ -93,6 +120,23 @@ class PlaybackViewController: UIViewController {
         if let videoURL = videoURL {
             shareVideo(videoURL: videoURL)
         }
+    }
+    
+    @IBAction func btnDeleteClicked(_ sender: UIButton) {
+        let alertController = UIAlertController(title: "Delete Video", message: "Are you sure? This cannot be undone.", preferredStyle: .alert)
+        
+        let actionCancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(actionCancel)
+        
+        let actionDelete = UIAlertAction(title: "Delete", style: .destructive) { _ in
+            self.deleteVideo(videoURL: self.videoURL) {
+                self.closeView()
+                NotificationCenter.default.post(name: Notification.presentationVideoDeleted, object: nil)
+            }
+        }
+        alertController.addAction(actionDelete)
+        
+        present(alertController, animated: true, completion: nil)
     }
 }
 

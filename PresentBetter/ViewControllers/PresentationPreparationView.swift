@@ -3,12 +3,16 @@ import UIKit
 
 extension Notification {
     static let popoverDismissed = Notification.Name("popoverDismissed")
+    static let presentationVideoDeleted = Notification.Name("presentationVideoDeleted")
 }
 
 class PresentationPreparationViewController: UIViewController {
     @IBOutlet var personOutlineView: UIView!
     @IBOutlet var btnPresent: UIButton!
     @IBOutlet var btnBack: UIButton!
+    
+    var isPresentationMode = true
+    var myParentViewController: UIViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,21 +45,30 @@ class PresentationPreparationViewController: UIViewController {
     }
     
     @IBAction func btnBackClicked(_ sender: UIButton) {
-        if let window = UIApplication.shared.windows.first {
-            window.rootViewController = UIHostingController(rootView: ContentView())
-            window.makeKeyAndVisible()
-            UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: nil, completion: nil)
+        if isPresentationMode {
+            if let window = UIApplication.shared.windows.first {
+                window.rootViewController = UIHostingController(rootView: ContentView())
+                window.makeKeyAndVisible()
+                UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: nil, completion: nil)
+            }
+        } else {
+            dismiss(animated: true, completion: nil)
+            myParentViewController?.navigationController?.popViewController(animated: true)
         }
     }
 }
 
 extension PresentationPreparationViewController {
-    static func showView(_ parentViewController: UIViewController) {
+    static func showView(_ parentViewController: UIViewController, mode: Bool = true) {
         let storyboard = UIStoryboard(name: "Main", bundle: .main)
-        let viewController = storyboard.instantiateViewController(identifier: "PresentationPreparationViewController")
-        viewController.modalTransitionStyle = .crossDissolve
-        viewController.modalPresentationStyle = .overFullScreen
+        if let viewController = storyboard.instantiateViewController(identifier: "PresentationPreparationViewController") as? PresentationPreparationViewController {
+            viewController.modalTransitionStyle = .crossDissolve
+            viewController.modalPresentationStyle = .overFullScreen
+            
+            viewController.isPresentationMode = mode
+            viewController.myParentViewController = parentViewController
         
-        parentViewController.present(viewController, animated: false, completion: nil)
+            parentViewController.present(viewController, animated: false, completion: nil)
+        }
     }
 }

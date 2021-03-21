@@ -13,7 +13,7 @@ enum ActiveAlert {
 }
 
 struct SignupView: View {
-    @Environment(\.presentationMode) var mode: Binding<PresentationMode>
+    @Environment(\.presentationMode) var mode
     
     @State private var email = ""
     @State private var password = ""

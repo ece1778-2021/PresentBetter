@@ -10,6 +10,19 @@ enum PresentationState {
     case presenting
 }
 
+enum PresentationMode {
+    case trainingFacial
+    case trainingEye
+    case trainingGesture
+    case presenting
+}
+
+enum TrainingState {
+    case tooFew
+    case good
+    case tooMuch
+}
+
 func deg(_ rad: Float) -> Float {
     return rad / .pi * 180
 }
@@ -22,6 +35,8 @@ class PresentationViewController: UIViewController {
     @IBOutlet var countdownBackgroundView: UIView!
     @IBOutlet var recordingIndicator: UIView!
     @IBOutlet var recordingIndicatorView: UIView!
+    @IBOutlet var tipBackgroundView: UIView!
+    @IBOutlet var lblTip: UILabel!
     
     // AVCaptureSession objects
     var captureSession: AVCaptureSession!
@@ -55,11 +70,19 @@ class PresentationViewController: UIViewController {
     var handPoseSession: HandPoseSession!
     
     // Presentation parameters
+    var mode: PresentationMode = .presenting    // Presentation mode: Training or Presenting?
     var state: PresentationState = .preparing
     var countdown = 5
     var smiledInSpan = false, totalSmiles = 0
     var handMovedInSpan = false, totalHandMoves = 0
     var focusDetected = 0, lostFocusDetected = 0, totalLooks = 0
+    var isPresentationRecorded = true
+    
+    // Training parameters
+    var recentFeedbacks = [Bool]()
+    var trainingState: TrainingState = .good
+    var recentTrainingState = [TrainingState]()
+    var firstReachWindow = false
     
     // Performance metrics: Number of frames processed during a session
     var frames = 0
@@ -81,6 +104,9 @@ class PresentationViewController: UIViewController {
         
         recordingIndicatorView.isHidden = true
         recordingIndicator.layer.cornerRadius = 5.0
+        
+        tipBackgroundView.layer.cornerRadius = 35.0
+        tipBackgroundView.isHidden = true
         
         facialExpressionSession = FacialExpressionSession(boundingFrame: view.frame)
         handPoseSession = HandPoseSession()
@@ -117,7 +143,7 @@ class PresentationViewController: UIViewController {
                 if self.configSuccessful {
                     self.captureSession.startRunning()
                     
-                    PresentationPreparationViewController.showView(self)
+                    PresentationPreparationViewController.showView(self, mode: self.mode == .presenting)
                     NotificationCenter.default.addObserver(self, selector: #selector(self.startPresenting), name: Notification.popoverDismissed, object: nil)
                 } else {
                     NoCameraViewController.showView(self)
@@ -148,7 +174,11 @@ class PresentationViewController: UIViewController {
     }
     
     func initializeARScene() {
-        eyeContactSession = EyeContactSession(currentScene: sceneView.scene)
+        if mode != .trainingEye {
+            eyeContactSession = EyeContactSession(currentScene: sceneView.scene)
+        } else {
+            eyeContactSession = EyeContactSession(currentScene: sceneView.scene, hideLaser: false)
+        }
         sceneView.delegate = self
         sceneView.session.delegate = self
         sceneView.preferredFramesPerSecond = 15
@@ -272,13 +302,15 @@ class PresentationViewController: UIViewController {
             smiledInSpan = true
         }
         
+        /*
         DispatchQueue.main.async {
             if let imageBoundingBox = self.facialExpressionSession.imageBoundingBox {
-                //let path = UIBezierPath(roundedRect: imageBoundingBox, cornerRadius: 0)
-                //self.roundRectLayer.isHidden = false
-                //self.roundRectLayer.path = path.cgPath
+                let path = UIBezierPath(roundedRect: imageBoundingBox, cornerRadius: 0)
+                self.roundRectLayer.isHidden = false
+                self.roundRectLayer.path = path.cgPath
             }
         }
+         */
     }
     
     // MARK: - Body pose detection
@@ -374,7 +406,7 @@ extension PresentationViewController: ARSessionDelegate {
         if tryStartPresentation == true {
             if AVCaptureDevice.authorizationStatus(for: .video) == .authorized {
                 tryStartPresentation = false
-                PresentationPreparationViewController.showView(self)
+                PresentationPreparationViewController.showView(self, mode: self.mode == .presenting)
                 NotificationCenter.default.addObserver(self, selector: #selector(self.startPresenting), name: Notification.popoverDismissed, object: nil)
             }
         }
@@ -423,6 +455,18 @@ extension PresentationViewController {
             feedbackView.totalHandMoves = totalHandMoves
             feedbackView.totalLooks = totalLooks
             feedbackView.videoURL = videoURL
+        } else if segue.identifier == "forwardToTrainingResult" {
+            let resultView = segue.destination as! TrainingResultViewController
+            if mode == .trainingFacial {
+                resultView.mode = .facialExpression
+                resultView.totalPasses = totalSmiles
+            } else if mode == .trainingGesture {
+                resultView.mode = .gesture
+                resultView.totalPasses = totalHandMoves
+            } else if mode == .trainingEye {
+                resultView.mode = .eyeContact
+                resultView.totalPasses = totalLooks
+            }
         }
     }
     
@@ -438,11 +482,21 @@ extension PresentationViewController {
         totalLooks = 0
         state = .preparing
         
+        recentFeedbacks.removeAll()
+        trainingState = .good
+        recentTrainingState.removeAll()
+        firstReachWindow = false
+        
         handPoseSession.reset()
         
         lblPrepareCountdown.isHidden = true
         countdownBackgroundView.isHidden = true
-        lblCountdown.text = "00:15"
+        
+        if mode == .presenting {
+            lblCountdown.text = "00:15"
+        } else {
+            lblCountdown.text = "00:30"
+        }
     }
     
     func resetRecordingIndicator() {
@@ -474,12 +528,16 @@ extension PresentationViewController {
             lblPrepareCountdown.isHidden = true
             countdownBackgroundView.isHidden = false
             
-            if supportsDepthCamera {
+            if supportsDepthCamera && isPresentationRecorded {
                 startRecordingIndicator()
                 recorder?.record()
             }
             
-            countdown = 30
+            if mode == .presenting {
+                countdown = 30
+            } else {
+                countdown = 60
+            }
             state = .presenting
             let _ = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: presentationCountdown)
         }
@@ -493,16 +551,43 @@ extension PresentationViewController {
         
         if smiledInSpan {
             smiledInSpan = false
+            if mode == .trainingFacial {
+                recentFeedbacks.append(true)
+                processTrainingData()
+            }
             totalSmiles += 1
+        } else {
+            if mode == .trainingFacial {
+                recentFeedbacks.append(false)
+                processTrainingData()
+            }
         }
         
         if handMovedInSpan {
             handMovedInSpan = false
+            if mode == .trainingGesture {
+                recentFeedbacks.append(true)
+                processTrainingData()
+            }
             totalHandMoves += 1
+        } else {
+            if mode == .trainingGesture {
+                recentFeedbacks.append(false)
+                processTrainingData()
+            }
         }
         
         if focusDetected > lostFocusDetected {
+            if mode == .trainingEye {
+                recentFeedbacks.append(true)
+                processTrainingData()
+            }
             totalLooks += 1
+        } else {
+            if mode == .trainingEye {
+                recentFeedbacks.append(false)
+                processTrainingData()
+            }
         }
         focusDetected = 0
         lostFocusDetected = 0
@@ -510,13 +595,119 @@ extension PresentationViewController {
         if countdown == 0 {
             timer.invalidate()
             
-            recorder?.stop() { videoURL in
-                DispatchQueue.main.async {
-                    print(videoURL)
-                    self.videoURL = videoURL
-                    self.performSegue(withIdentifier: "forwardToFeedback", sender: self)
+            if supportsDepthCamera && isPresentationRecorded {
+                recorder?.stop() { videoURL in
+                    DispatchQueue.main.async {
+                        self.forwardToFeedback(videoURL: videoURL)
+                    }
+                }
+            } else {
+                self.forwardToFeedback(videoURL: nil)
+            }
+        }
+    }
+    
+    func processTrainingData() {
+        var tips: [String]
+        var windowTrainingState: TrainingState
+        
+        if mode == .trainingFacial {
+            tips = ["Smile more.", "Great! Keep doing.", "Smile less."]
+        } else if mode == .trainingGesture {
+            tips = ["Move your arms more.", "Great! Keep doing.", "Move your arms less."]
+        } else {
+            tips = ["Look at camera more.", "Great! Keep doing.", "Look at camera less."]
+        }
+        
+        if recentFeedbacks.count >= 10 {
+            if recentFeedbacks.count > 10 {
+                recentFeedbacks.removeFirst()
+            }
+            
+            let newTip: String
+            let totalMatches = recentFeedbacks.filter { $0 == true }.count
+            if totalMatches < 3 {
+                newTip = tips[0]
+                windowTrainingState = .tooFew
+                recentTrainingState.append(.tooFew)
+            } else if totalMatches >= 3 && totalMatches <= 8 {
+                newTip = tips[1]
+                windowTrainingState = .good
+                recentTrainingState.append(.good)
+            } else {
+                newTip = tips[2]
+                windowTrainingState = .tooMuch
+                recentTrainingState.append(.tooMuch)
+            }
+            
+            if recentTrainingState.count > 10 {
+                recentTrainingState.removeFirst()
+            }
+            
+            if firstReachWindow == false {
+                firstReachWindow = true
+                trainingState = windowTrainingState
+                animateTip(firstTip: true, newTip: newTip)
+            } else {
+                if recentTrainingState.count >= 2 {
+                    let mostRecentTrainingState = recentTrainingState.suffix(2)
+                    if windowTrainingState != trainingState && (mostRecentTrainingState.filter { $0 == windowTrainingState }.count == 2) {
+                        trainingStateTransition(newState: windowTrainingState)
+                        animateTip(firstTip: false, newTip: newTip)
+                    }
                 }
             }
+        }
+    }
+    
+    func trainingStateTransition(newState: TrainingState) {
+        if trainingState == .tooFew {
+            if newState == .good || newState == .tooMuch {
+                trainingState = .good
+            }
+        } else if trainingState == .good {
+            trainingState = newState
+        } else {
+            if newState == .good || newState == .tooFew {
+                trainingState = .good
+            }
+        }
+    }
+    
+    func animateTip(firstTip: Bool, newTip: String) {
+        if firstTip {
+            tipBackgroundView.alpha = 0
+            tipBackgroundView.isHidden = false
+            tipBackgroundView.transform = CGAffineTransform(translationX: 0, y: 30)
+            lblTip.text = newTip
+            UIView.animate(withDuration: 0.25, animations: {
+                self.tipBackgroundView.alpha = 1
+                self.tipBackgroundView.transform = CGAffineTransform.identity
+            })
+        } else {
+            UIView.animate(withDuration: 0.25, animations: {
+                self.tipBackgroundView.alpha = 0
+                self.tipBackgroundView.transform = CGAffineTransform(translationX: 0, y: -30)
+            }) { _ in
+                self.tipBackgroundView.transform = CGAffineTransform(translationX: 0, y: 30)
+                self.lblTip.text = newTip
+                UIView.animate(withDuration: 0.25, animations: {
+                    self.tipBackgroundView.alpha = 1
+                    self.tipBackgroundView.transform = CGAffineTransform.identity
+                })
+            }
+        }
+    }
+    
+    func forwardToFeedback(videoURL: URL?) {
+        if let videoURL = videoURL {
+            self.videoURL = videoURL
+        }
+        
+        if mode == .presenting {
+            self.performSegue(withIdentifier: "forwardToFeedback", sender: self)
+        } else {
+            self.performSegue(withIdentifier: "forwardToTrainingResult", sender: self)
         }
     }
 }

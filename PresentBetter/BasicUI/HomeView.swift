@@ -54,19 +54,38 @@ struct HomeView: View {
                             Spacer()
                         }
                         Spacer()
-                        Button(action: {
-                            navigateToPresentationUI()
-                        }, label: {
-                            Image("Present")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 100, height: 100, alignment: .center)
-                                .foregroundColor(.white)
-                        })
-                        Text("PRACTICE PRESENTING")
+                        Image("Present")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 180, height: 180, alignment: .center)
                             .foregroundColor(.white)
-                            .font(.custom("Montserrat-SemiBold", size: 20))
-                            .multilineTextAlignment(.center)
+                        HStack {
+                            Button(action: {
+                                navigateToPresentationUI(mode: .trainingFacial)
+                            }, label: {
+                                Text("TRAIN")
+                                    .foregroundColor(lightBlueColor)
+                                    .font(.custom("Montserrat-SemiBold", size: 20))
+                                    .multilineTextAlignment(.center)
+                            })
+                            .frame(width: 150, height: 50, alignment: .center)
+                            .background(Color.white)
+                            .cornerRadius(25)
+                            
+                            Button(action: {
+                                navigateToPresentationUI(mode: .presenting)
+                            }, label: {
+                                Text("PRACTICE")
+                                    .foregroundColor(lightBlueColor)
+                                    .font(.custom("Montserrat-SemiBold", size: 20))
+                                    .multilineTextAlignment(.center)
+                            })
+                            .frame(width: 150, height: 50, alignment: .center)
+                            .background(Color.white)
+                            .cornerRadius(25)
+                        }
+                        .padding(.top, 30)
+                        
                         Spacer()
                     }
                 }
@@ -89,10 +108,15 @@ struct HomeView: View {
         }
     }
     
-    func navigateToPresentationUI() {
+    func navigateToPresentationUI(mode: PresentationMode = .presenting) {
+        var viewControllerName = "RootNavigationTraining"
+        if mode == .presenting {
+            viewControllerName = "RootNavigation"
+        }
+        
         if let window = UIApplication.shared.windows.first {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let viewController = storyboard.instantiateViewController(identifier: "RootNavigation")
+            let viewController = storyboard.instantiateViewController(identifier: viewControllerName)
         
             window.rootViewController = viewController
             window.makeKeyAndVisible()
