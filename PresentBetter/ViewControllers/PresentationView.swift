@@ -132,12 +132,8 @@ class PresentationViewController: UIViewController {
         DispatchQueue.main.async {
             if self.supportsDepthCamera {
                 self.initializeAVAudio()
-                if self.hasMicrophoneAccess {
-                    self.tryStartPresentation = true
-                    self.startARSession()
-                } else {
-                    NoCameraViewController.showView(self)
-                }
+                self.tryStartPresentation = true
+                self.startARSession()
             } else {
                 // Fallback to traditional AVCaptureSession if the device has no TrueDepth camera.
                 if self.configSuccessful {
