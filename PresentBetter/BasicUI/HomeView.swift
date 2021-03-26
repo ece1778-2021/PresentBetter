@@ -9,6 +9,7 @@ import SwiftUI
 import Firebase
 
 struct HomeView: View {
+    @EnvironmentObject var userInfo: UserInfo
     @State var isSignOut = false
     
     let lightBlueColor = Color(red: 0.0/255.0, green: 224.0/255.0, blue: 249.0/255.0)
@@ -23,7 +24,7 @@ struct HomeView: View {
                     lightBlueColor
                     VStack{
                         Spacer()
-                        Text("WELCOME BACK,\nUSER!")
+                        Text("WELCOME BACK,\n\(GetUserName())!")
                             .foregroundColor(.white)
                             .font(.custom("Spartan-Bold", size: 45))
                             .multilineTextAlignment(.center)
@@ -42,11 +43,11 @@ struct HomeView: View {
                             }
                             Spacer()
                             VStack{
-                                Text("RANK")
+                                Text("LAST SCORE")
                                     .foregroundColor(.white)
                                     .font(.custom("Lato-Bold", size: 17))
                                     .multilineTextAlignment(.center)
-                                Text("1st")
+                                Text("0%")
                                     .foregroundColor(.white)
                                     .font(.custom("Oswald-Regular_Bold", size: 70))
                                     .multilineTextAlignment(.center)
@@ -105,9 +106,15 @@ struct HomeView: View {
             .navigationTitle("")
             .navigationBarHidden(true)
             .navigationBarBackButtonHidden(true)
+            .onAppear(){
+                self.userInfo.GetName()
+            }
         }
     }
     
+    func GetUserName() -> String{
+        return self.userInfo.name as! String
+    }
     func navigateToPresentationUI(mode: PresentationMode = .presenting) {
         var viewControllerName = "RootNavigationTraining"
         if mode == .presenting {

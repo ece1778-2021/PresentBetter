@@ -12,10 +12,11 @@ import Firebase
 struct PresentBetterApp: App {
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    var userInfo = UserInfo()
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView().environmentObject(userInfo)
         }
     }
 }

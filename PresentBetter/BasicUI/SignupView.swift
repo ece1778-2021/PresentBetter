@@ -17,6 +17,7 @@ struct SignupView: View {
     
     @State private var email = ""
     @State private var password = ""
+    @State private var name = ""
     @State private var error: String = ""
     @State private var isSigned = false
     @State private var showAlert = false
@@ -48,13 +49,28 @@ struct SignupView: View {
                                 .multilineTextAlignment(.center)
                             Spacer()
                             HStack{
+                                Image(systemName: "person.crop.square")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 30, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                                    .foregroundColor(.white)
+                                    .padding(.leading, 30)
+                                TextField("Name", text: $name)
+                                    .font(Font.custom("Montserrat-SemiBold", size: 20))
+                                    .frame(height: 45)
+                                    .background(Color.white)
+                                    .autocapitalization(.none)
+                                    .cornerRadius(10)
+                                    .padding(.trailing, 30)
+                            }
+                            HStack{
                                 Image("User")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .frame(width: 30, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                                     .foregroundColor(.white)
                                     .padding(.leading, 30)
-                                TextField("", text: $email)
+                                TextField("User", text: $email)
                                     .font(Font.custom("Montserrat-SemiBold", size: 20))
                                     .frame(height: 45)
                                     .background(Color.white)
@@ -69,7 +85,7 @@ struct SignupView: View {
                                     .frame(width: 30, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                                     .foregroundColor(.white)
                                     .padding(.leading, 30)
-                                SecureField("", text: $password)
+                                SecureField("Password", text: $password)
                                     .font(Font.custom("Montserrat-SemiBold", size: 20))
                                     .frame(height: 45)
                                     .background(Color.white)
@@ -162,15 +178,33 @@ struct SignupView: View {
                 self.showAlert = true
                 self.activeAlert = .forth
             }else{
-                print("successfully")
-                self.isLoading.toggle()
-                self.isSigned = true
-                //register()
+                register()
             }
         }
     }
     func register(){
+        let db = Firestore.firestore()
+        let userid = Auth.auth().currentUser?.uid
         
+        if let userid = userid{
+            //var ref: DocumentReference? = nil
+            db.document("users/\(userid)").setData([
+                //"author": user?.uid as Any,
+                "Name": name.description
+            ]) { err in
+                if let err = err {
+                    print("Error adding document: \(err)")
+                } else {
+                   // print("Document added with ID: \(ref!.documentID)"
+                    print("successfully")
+                    self.isLoading.toggle()
+                    self.isSigned = true
+                }
+            }
+        }
+        else{
+            print("Filed to create user!")
+        }
     }
 }
 

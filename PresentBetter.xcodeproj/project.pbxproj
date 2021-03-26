@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		141B29F0260DD06F00CDF517 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 141B29EF260DD06F00CDF517 /* UserInfo.swift */; };
 		14DE2E8725F781BE0064982A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 14DE2E8625F781BE0064982A /* GoogleService-Info.plist */; };
 		14DE2E9025F782050064982A /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DE2E8A25F782050064982A /* LoginView.swift */; };
 		14DE2E9225F782050064982A /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DE2E8C25F782050064982A /* HomeView.swift */; };
@@ -53,6 +54,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		141B29EF260DD06F00CDF517 /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		14DE2E8625F781BE0064982A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		14DE2E8A25F782050064982A /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		14DE2E8C25F782050064982A /* HomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 				14DE2E8F25F782050064982A /* ContentView.swift */,
 				14DE2EAB25F786E20064982A /* KeyboardAvoid.swift */,
 				14F6AA8425FF6F55004FE096 /* LoadingView.swift */,
+				141B29EF260DD06F00CDF517 /* UserInfo.swift */,
 			);
 			path = BasicUI;
 			sourceTree = "<group>";
@@ -390,6 +393,7 @@
 				E59A21A425D89CE5009E0082 /* PresentationView.swift in Sources */,
 				E5134B5A25E83A6F0098C7E6 /* AlertView.swift in Sources */,
 				E53996D925E99C2D00F38FE2 /* EyeCalibrationView.swift in Sources */,
+				141B29F0260DD06F00CDF517 /* UserInfo.swift in Sources */,
 				E5DEE73825EB0AB900BE0E1F /* FacialExpression.swift in Sources */,
 				E59A21A025D89CE5009E0082 /* (null) in Sources */,
 				E59A21A225D89CE5009E0082 /* (null) in Sources */,
