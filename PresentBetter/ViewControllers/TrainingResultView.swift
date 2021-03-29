@@ -9,6 +9,7 @@ class TrainingResultViewController: UIViewController {
     
     var mode: PresentationTipMode = .facialExpression
     var totalPasses = 0
+    var userInfo = UserInfo()
     
     let facialTips = [
         "Work Hard!\nYou need to smile more frequently.",
@@ -61,7 +62,7 @@ class TrainingResultViewController: UIViewController {
     
     @IBAction func btnHomeClicked(_ sender: UIButton) {
         if let window = UIApplication.shared.windows.first {
-            window.rootViewController = UIHostingController(rootView: ContentView())
+            window.rootViewController = UIHostingController(rootView: ContentView().environmentObject(userInfo))
             window.makeKeyAndVisible()
             UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: nil, completion: nil)
         }

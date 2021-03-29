@@ -8,6 +8,7 @@ class AreaSelectionViewController: UIViewController {
     @IBOutlet var btnHome: UIButton!
     
     var mode: PresentationMode = .trainingFacial
+    var userInfo = UserInfo()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +33,7 @@ class AreaSelectionViewController: UIViewController {
     
     @IBAction func btnHomeClicked(_ sender: UIButton) {
         if let window = UIApplication.shared.windows.first {
-            window.rootViewController = UIHostingController(rootView: ContentView())
+            window.rootViewController = UIHostingController(rootView: ContentView().environmentObject(userInfo))
             window.makeKeyAndVisible()
             UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: nil, completion: nil)
         }

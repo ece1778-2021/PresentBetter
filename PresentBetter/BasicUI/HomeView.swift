@@ -11,6 +11,8 @@ import Firebase
 struct HomeView: View {
     @EnvironmentObject var userInfo: UserInfo
     @State var isSignOut = false
+    @State var lastScore = "0%"
+    @State var highScore = 0
     
     let lightBlueColor = Color(red: 0.0/255.0, green: 224.0/255.0, blue: 249.0/255.0)
     
@@ -36,7 +38,7 @@ struct HomeView: View {
                                     .foregroundColor(.white)
                                     .font(.custom("Lato-Bold", size: 17))
                                     .multilineTextAlignment(.center)
-                                Text("0%")
+                                Text("\(self.highScore)%")
                                     .foregroundColor(.white)
                                     .font(.custom("Oswald-Regular_Bold", size: 70))
                                     .multilineTextAlignment(.center)
@@ -47,7 +49,7 @@ struct HomeView: View {
                                     .foregroundColor(.white)
                                     .font(.custom("Lato-Bold", size: 17))
                                     .multilineTextAlignment(.center)
-                                Text("0%")
+                                Text(self.lastScore)
                                     .foregroundColor(.white)
                                     .font(.custom("Oswald-Regular_Bold", size: 70))
                                     .multilineTextAlignment(.center)
@@ -108,6 +110,7 @@ struct HomeView: View {
             .navigationBarBackButtonHidden(true)
             .onAppear(){
                 self.userInfo.GetName()
+                self.getScore()
             }
         }
     }
@@ -128,6 +131,30 @@ struct HomeView: View {
             window.rootViewController = viewController
             window.makeKeyAndVisible()
             UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromRight, animations: nil, completion: nil)
+        }
+    }
+    func getScore(){
+        let db = Firestore.firestore()
+        let userid = Auth.auth().currentUser?.uid
+        //let dispatch = DispatchGroup()
+        var scores: Array<String> = []
+        
+        
+        db.collection("grades").whereField("uid", isEqualTo: userid as Any).order(by: "timestamp", descending: true)
+            .getDocuments() { (querySnapshot, err) in
+                if let err = err {
+                    print("Error getting documents: \(err)")
+                } else {
+                    for document in querySnapshot!.documents {
+                        print("\(document.documentID) => \(document.data())")
+                        let score = document.data()["totalScore"] as! String
+                        scores.append(score)
+                        if self.highScore < Int(score.dropLast())!{
+                            self.highScore = Int(score.dropLast())!
+                        }
+                    }
+                    self.lastScore = scores[0]
+                }
         }
     }
 }

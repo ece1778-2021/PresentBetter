@@ -21,6 +21,7 @@ class FeedbackViewController: UIViewController {
     @IBOutlet var lblTotalScore: UILabel!
     @IBOutlet var lblRank: UILabel!
     
+    var userInfo = UserInfo()
     var totalSmiles = 0
     var totalHandMoves = 0
     var totalLooks = 0
@@ -78,6 +79,7 @@ class FeedbackViewController: UIViewController {
         
         avgScore = totalScore / 3
         lblTotalScore.text = "\(avgScore)%"
+        storeVars()
     }
     
     @IBAction func btnHomeClicked(_ sender: UIButton) {
@@ -90,7 +92,7 @@ class FeedbackViewController: UIViewController {
         }
         
         if let window = UIApplication.shared.windows.first {
-            window.rootViewController = UIHostingController(rootView: ContentView())
+            window.rootViewController = UIHostingController(rootView: ContentView().environmentObject(userInfo))
             window.makeKeyAndVisible()
             UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: nil, completion: nil)
         }
@@ -218,5 +220,26 @@ class FeedbackViewController: UIViewController {
         }
         
         return (Int(score), feedback)
+    }
+    func storeVars(){
+        let userid = Auth.auth().currentUser!.uid
+        let db = Firestore.firestore()
+        let timestamp = Int(NSDate().timeIntervalSince1970)
+        
+        var ref: DocumentReference? = nil
+        ref = db.collection("grades").addDocument(data: [
+            "uid": userid,
+            "totalSmiles": self.totalSmiles,
+            "totalHandMoves": self.totalHandMoves,
+            "totalLooks": self.totalLooks,
+            "totalScore": lblTotalScore.text,
+            "timestamp": timestamp
+        ]) { err in
+            if let err = err {
+                print("Error adding document: \(err)")
+            } else {
+                print("Successfully!")
+            }
+        }
     }
 }

@@ -3,6 +3,7 @@ import UIKit
 
 class NoCameraViewController: UIViewController {
     @IBOutlet var btnBack: UIButton!
+    var userInfo = UserInfo()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,7 +26,7 @@ class NoCameraViewController: UIViewController {
     
     @IBAction func btnBackClicked(_ sender: UIButton) {
         if let window = UIApplication.shared.windows.first {
-            window.rootViewController = UIHostingController(rootView: ContentView())
+            window.rootViewController = UIHostingController(rootView: ContentView().environmentObject(userInfo))
             window.makeKeyAndVisible()
             UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: nil, completion: nil)
         }

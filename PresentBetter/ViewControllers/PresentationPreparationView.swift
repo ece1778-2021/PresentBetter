@@ -13,6 +13,7 @@ class PresentationPreparationViewController: UIViewController {
     
     var isPresentationMode = true
     var myParentViewController: UIViewController?
+    var userInfo = UserInfo()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,7 +48,7 @@ class PresentationPreparationViewController: UIViewController {
     @IBAction func btnBackClicked(_ sender: UIButton) {
         if isPresentationMode {
             if let window = UIApplication.shared.windows.first {
-                window.rootViewController = UIHostingController(rootView: ContentView())
+                window.rootViewController = UIHostingController(rootView: ContentView().environmentObject(userInfo))
                 window.makeKeyAndVisible()
                 UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: nil, completion: nil)
             }
