@@ -86,6 +86,7 @@ struct HomeView: View {
                             .frame(width: 150, height: 50, alignment: .center)
                             .background(Color.white)
                             .cornerRadius(25)
+                            NavigationLink("Scores", destination: ScoresView())
                         }
                         .padding(.top, 30)
                         

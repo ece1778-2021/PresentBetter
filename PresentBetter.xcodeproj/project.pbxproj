@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		141B29F0260DD06F00CDF517 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 141B29EF260DD06F00CDF517 /* UserInfo.swift */; };
+		141B29FE2611E3A100CDF517 /* ScoresView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 141B29FD2611E3A100CDF517 /* ScoresView.swift */; };
 		14DE2E8725F781BE0064982A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 14DE2E8625F781BE0064982A /* GoogleService-Info.plist */; };
 		14DE2E9025F782050064982A /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DE2E8A25F782050064982A /* LoginView.swift */; };
 		14DE2E9225F782050064982A /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DE2E8C25F782050064982A /* HomeView.swift */; };
@@ -55,6 +56,7 @@
 
 /* Begin PBXFileReference section */
 		141B29EF260DD06F00CDF517 /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
+		141B29FD2611E3A100CDF517 /* ScoresView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoresView.swift; sourceTree = "<group>"; };
 		14DE2E8625F781BE0064982A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		14DE2E8A25F782050064982A /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		14DE2E8C25F782050064982A /* HomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 				14DE2E8D25F782050064982A /* PresentationViewSUI.swift */,
 				14DE2E8E25F782050064982A /* SignupView.swift */,
 				14DE2E8F25F782050064982A /* ContentView.swift */,
+				141B29FD2611E3A100CDF517 /* ScoresView.swift */,
 				14DE2EAB25F786E20064982A /* KeyboardAvoid.swift */,
 				14F6AA8425FF6F55004FE096 /* LoadingView.swift */,
 				141B29EF260DD06F00CDF517 /* UserInfo.swift */,
@@ -400,6 +403,7 @@
 				E5D1B144260801C9002CD603 /* TrainingResultView.swift in Sources */,
 				E5B7DDE125DA43CF00EBE2E5 /* emotion_image_input.mlmodel in Sources */,
 				E5DEE73025EA967F00BE0E1F /* EyeTrack.swift in Sources */,
+				141B29FE2611E3A100CDF517 /* ScoresView.swift in Sources */,
 				E53AE91E25E80BF400479BF1 /* CustomGraphics.swift in Sources */,
 				E5D427632607EF1400714D7A /* PresentationTipView.swift in Sources */,
 				E5B7DDE425DAC49100EBE2E5 /* MLProvider.swift in Sources */,
