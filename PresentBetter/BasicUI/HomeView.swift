@@ -38,10 +38,12 @@ struct HomeView: View {
                                     .foregroundColor(.white)
                                     .font(.custom("Lato-Bold", size: 17))
                                     .multilineTextAlignment(.center)
-                                Text("\(self.highScore)%")
-                                    .foregroundColor(.white)
-                                    .font(.custom("Oswald-Regular_Bold", size: 70))
-                                    .multilineTextAlignment(.center)
+                                NavigationLink(destination: ScoresView()){
+                                    Text("\(self.highScore)%")
+                                        .foregroundColor(.white)
+                                        .font(.custom("Oswald-Regular_Bold", size: 70))
+                                        .multilineTextAlignment(.center)
+                                }
                             }
                             Spacer()
                             VStack{
@@ -49,10 +51,12 @@ struct HomeView: View {
                                     .foregroundColor(.white)
                                     .font(.custom("Lato-Bold", size: 17))
                                     .multilineTextAlignment(.center)
-                                Text(self.lastScore)
-                                    .foregroundColor(.white)
-                                    .font(.custom("Oswald-Regular_Bold", size: 70))
-                                    .multilineTextAlignment(.center)
+                                NavigationLink(destination: ScoresView()){
+                                    Text(self.lastScore)
+                                        .foregroundColor(.white)
+                                        .font(.custom("Oswald-Regular_Bold", size: 70))
+                                        .multilineTextAlignment(.center)
+                                }
                             }
                             Spacer()
                         }
@@ -86,7 +90,6 @@ struct HomeView: View {
                             .frame(width: 150, height: 50, alignment: .center)
                             .background(Color.white)
                             .cornerRadius(25)
-                            NavigationLink("Scores", destination: ScoresView())
                         }
                         .padding(.top, 30)
                         
