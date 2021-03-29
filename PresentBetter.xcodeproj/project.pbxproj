@@ -21,6 +21,7 @@
 		3E7535684384A1302C799024 /* Pods_PresentBetter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3011A6E479955BD9FE8E02C9 /* Pods_PresentBetter.framework */; };
 		E50160AF25E827BF0040966F /* Spartan-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E50160AE25E827BF0040966F /* Spartan-Bold.ttf */; };
 		E5134B5A25E83A6F0098C7E6 /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5134B5925E83A6F0098C7E6 /* AlertView.swift */; };
+		E5229BBC2612863800573034 /* HistoricalScoresView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5229BBB2612863800573034 /* HistoricalScoresView.swift */; };
 		E53996D925E99C2D00F38FE2 /* EyeCalibrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53996D825E99C2D00F38FE2 /* EyeCalibrationView.swift */; };
 		E53AE91E25E80BF400479BF1 /* CustomGraphics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53AE91D25E80BF400479BF1 /* CustomGraphics.swift */; };
 		E53AE92125E811F300479BF1 /* PresentationPreparationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53AE92025E811F300479BF1 /* PresentationPreparationView.swift */; };
@@ -73,6 +74,7 @@
 		E5134B5225E833C50098C7E6 /* PresentBetter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PresentBetter.png; sourceTree = "<group>"; };
 		E5134B5625E835410098C7E6 /* ShapeArt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ShapeArt.png; sourceTree = "<group>"; };
 		E5134B5925E83A6F0098C7E6 /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
+		E5229BBB2612863800573034 /* HistoricalScoresView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoricalScoresView.swift; sourceTree = "<group>"; };
 		E53996D825E99C2D00F38FE2 /* EyeCalibrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeCalibrationView.swift; sourceTree = "<group>"; };
 		E53AE91D25E80BF400479BF1 /* CustomGraphics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomGraphics.swift; sourceTree = "<group>"; };
 		E53AE92025E811F300479BF1 /* PresentationPreparationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationPreparationView.swift; sourceTree = "<group>"; };
@@ -161,6 +163,7 @@
 				E5ABA5CE2606B5E9007E7278 /* AreaSelectionView.swift */,
 				E5D427622607EF1400714D7A /* PresentationTipView.swift */,
 				E5D1B143260801C9002CD603 /* TrainingResultView.swift */,
+				E5229BBB2612863800573034 /* HistoricalScoresView.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -399,6 +402,7 @@
 				141B29F0260DD06F00CDF517 /* UserInfo.swift in Sources */,
 				E5DEE73825EB0AB900BE0E1F /* FacialExpression.swift in Sources */,
 				E59A21A025D89CE5009E0082 /* (null) in Sources */,
+				E5229BBC2612863800573034 /* HistoricalScoresView.swift in Sources */,
 				E59A21A225D89CE5009E0082 /* (null) in Sources */,
 				E5D1B144260801C9002CD603 /* TrainingResultView.swift in Sources */,
 				E5B7DDE125DA43CF00EBE2E5 /* emotion_image_input.mlmodel in Sources */,
@@ -561,7 +565,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = 59R6ACD3LT;
 				INFOPLIST_FILE = PresentBetter/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -583,7 +587,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = 59R6ACD3LT;
 				INFOPLIST_FILE = PresentBetter/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;

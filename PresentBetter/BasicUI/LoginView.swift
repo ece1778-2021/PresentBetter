@@ -47,7 +47,7 @@ struct LoginView: View {
                                         .frame(width: 30, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                                         .foregroundColor(.white)
                                         .padding(.leading, 30)
-                                    TextField("User", text: $email)
+                                    TextField("Email", text: $email)
                                         .font(Font.custom("Montserrat-SemiBold", size: 20))
                                         .frame(height: 45)
                                         .background(Color.white)

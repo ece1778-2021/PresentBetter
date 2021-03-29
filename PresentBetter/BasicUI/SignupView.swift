@@ -70,7 +70,7 @@ struct SignupView: View {
                                     .frame(width: 30, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                                     .foregroundColor(.white)
                                     .padding(.leading, 30)
-                                TextField("User", text: $email)
+                                TextField("Email", text: $email)
                                     .font(Font.custom("Montserrat-SemiBold", size: 20))
                                     .frame(height: 45)
                                     .background(Color.white)
@@ -132,12 +132,9 @@ struct SignupView: View {
                 }, label: {
                     Text("BACK")
                         .frame(width: 100, height: 35, alignment: .center)
-                        .foregroundColor(.white)
+                        .foregroundColor(lightBlueColor)
+                        .background(RoundedRectangle(cornerRadius: 20).fill(Color.white))
                         .font(.custom("MontSerrat-SemiBold", size: 22))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color.white, lineWidth: 2)
-                        )
                         .padding(.top, 30)
                         .padding(.leading, 15)
                 }))

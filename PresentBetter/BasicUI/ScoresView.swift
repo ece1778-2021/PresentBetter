@@ -13,8 +13,13 @@ struct ScoresView: View {
     @Environment(\.presentationMode) var mode
     @State var scores: Array<String> = []
     @State var timestamps: Array<String> = []
+    @State var timestampsRaw = [Date]()
     @State var lastScore = "0%"
     @State var highScore = 0
+    
+    @State var totalSmiles = [Int]()
+    @State var totalHandMoves = [Int]()
+    @State var totalLooks = [Int]()
     
     let lightBlueColor = Color(red: 0.0/255.0, green: 224.0/255.0, blue: 249.0/255.0)
     
@@ -26,7 +31,7 @@ struct ScoresView: View {
                 HStack{
                     Text("SCORES")
                         .foregroundColor(.white)
-                        .font(.custom("Spartan-Bold", size: 45))
+                        .font(.custom("Spartan-Bold", size: 37))
                         .multilineTextAlignment(.center)
                         .padding(.leading, 40)
                     Spacer()
@@ -36,13 +41,15 @@ struct ScoresView: View {
                         //LazyVGrid(columns: [GridItem()]) {
                             ForEach(0..<scores.count, id: \.self) { i in
                                 HStack{
-                                    Button(action: test){
+                                    Button(action: {
+                                        navigateToFeedbackUI(item: i)
+                                    }){
                                         Text(timestamps[i])
                                             .foregroundColor(.white)
-                                            .font(.custom("Oswald-Regular_Bold", size: 30))
+                                            .font(.custom("Montserrat-SemiBold", size: 22))
                                         Text(scores[i])
                                             .foregroundColor(.white)
-                                            .font(.custom("Oswald-Regular_Bold", size: 30))
+                                            .font(.custom("Montserrat-SemiBold", size: 22))
                                     }
                                 }
                             }
@@ -51,6 +58,8 @@ struct ScoresView: View {
                 Spacer()
                 Spacer()
             }
+            .alignmentGuide(.top) { d in d[.top] }
+            .padding(.top, 30)
         }
         .ignoresSafeArea()
         .navigationBarBackButtonHidden(true)
@@ -72,9 +81,30 @@ struct ScoresView: View {
             self.getScore()
         }
     }
+    
     func test(){
         
     }
+    
+    func navigateToFeedbackUI(item: Int) {
+        if let window = UIApplication.shared.windows.first {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            guard let viewController = storyboard.instantiateViewController(identifier: "FeedbackViewController") as? FeedbackViewController else {
+                return
+            }
+            
+            viewController.timestamp = timestampsRaw[item]
+            viewController.totalSmiles = totalSmiles[item]
+            viewController.totalLooks = totalLooks[item]
+            viewController.totalHandMoves = totalHandMoves[item]
+            viewController.mode = .viewExisting
+        
+            window.rootViewController = viewController
+            window.makeKeyAndVisible()
+            UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromRight, animations: nil, completion: nil)
+        }
+    }
+    
     func getScore(){
         let db = Firestore.firestore()
         let userid = Auth.auth().currentUser?.uid
@@ -89,7 +119,18 @@ struct ScoresView: View {
                     for document in querySnapshot!.documents {
                         let score = document.data()["totalScore"] as! String
                         let timestamp = document.data()["timestamp"] as! Int
+                        let totalLooks = document.data()["totalLooks"] as! Int
+                        let totalSmiles = document.data()["totalSmiles"] as! Int
+                        let totalHandMoves = document.data()["totalHandMoves"] as! Int
+                        
+                        self.totalLooks.append(totalLooks)
+                        self.totalSmiles.append(totalSmiles)
+                        self.totalHandMoves.append(totalHandMoves)
+                        
                         timestamps.append(changeTimestamp(timeStamp: timestamp))
+                        let timestampRaw = Date(timeIntervalSince1970: TimeInterval(timestamp))
+                        timestampsRaw.append(timestampRaw)
+                        
                         scores.append(score)
                         if self.highScore < Int(score.dropLast())!{
                             self.highScore = Int(score.dropLast())!
@@ -104,7 +145,7 @@ struct ScoresView: View {
         let timeInterval:TimeInterval = TimeInterval(timeStamp)
         let date = Date(timeIntervalSince1970: timeInterval)
         let dformatter = DateFormatter()
-        dformatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        dformatter.dateFormat = "MMM d, h:mm a"
         let reformedDate = dformatter.string(from: date)
         return reformedDate
     }

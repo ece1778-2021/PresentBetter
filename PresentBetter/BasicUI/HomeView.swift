@@ -8,13 +8,17 @@
 import SwiftUI
 import Firebase
 
+var highScorePassed = 0
+
 struct HomeView: View {
     @EnvironmentObject var userInfo: UserInfo
     @State var isSignOut = false
     @State var lastScore = "0%"
     @State var highScore = 0
     
-    let lightBlueColor = Color(red: 0.0/255.0, green: 224.0/255.0, blue: 249.0/255.0)
+    @State var noScores = false
+    
+    let lightBlueColor = Color(red: 0.0/255.0, green: 214.0/255.0, blue: 231.0/255.0)
     
     var body: some View {
         if self.isSignOut {
@@ -26,7 +30,7 @@ struct HomeView: View {
                     lightBlueColor
                     VStack{
                         Spacer()
-                        Text("WELCOME BACK,\n\(GetUserName())!")
+                        Text("WELCOME,\n\(GetUserName().uppercased())!")
                             .foregroundColor(.white)
                             .font(.custom("Spartan-Bold", size: 45))
                             .multilineTextAlignment(.center)
@@ -38,12 +42,15 @@ struct HomeView: View {
                                     .foregroundColor(.white)
                                     .font(.custom("Lato-Bold", size: 17))
                                     .multilineTextAlignment(.center)
-                                NavigationLink(destination: ScoresView()){
+                                Button(action: {
+                                    navigateToScoresUI()
+                                }, label: {
                                     Text("\(self.highScore)%")
                                         .foregroundColor(.white)
                                         .font(.custom("Oswald-Regular_Bold", size: 70))
                                         .multilineTextAlignment(.center)
-                                }
+                                })
+                                .disabled(noScores)
                             }
                             Spacer()
                             VStack{
@@ -51,12 +58,15 @@ struct HomeView: View {
                                     .foregroundColor(.white)
                                     .font(.custom("Lato-Bold", size: 17))
                                     .multilineTextAlignment(.center)
-                                NavigationLink(destination: ScoresView()){
+                                Button(action: {
+                                    navigateToScoresUI()
+                                }, label: {
                                     Text(self.lastScore)
                                         .foregroundColor(.white)
                                         .font(.custom("Oswald-Regular_Bold", size: 70))
                                         .multilineTextAlignment(.center)
-                                }
+                                })
+                                .disabled(noScores)
                             }
                             Spacer()
                         }
@@ -70,7 +80,7 @@ struct HomeView: View {
                             Button(action: {
                                 navigateToPresentationUI(mode: .trainingFacial)
                             }, label: {
-                                Text("TRAIN")
+                                Text("PRACTICE")
                                     .foregroundColor(lightBlueColor)
                                     .font(.custom("Montserrat-SemiBold", size: 20))
                                     .multilineTextAlignment(.center)
@@ -82,7 +92,7 @@ struct HomeView: View {
                             Button(action: {
                                 navigateToPresentationUI(mode: .presenting)
                             }, label: {
-                                Text("PRACTICE")
+                                Text("PRESENT")
                                     .foregroundColor(lightBlueColor)
                                     .font(.custom("Montserrat-SemiBold", size: 20))
                                     .multilineTextAlignment(.center)
@@ -98,12 +108,7 @@ struct HomeView: View {
                 }
                 .ignoresSafeArea()
                 .navigationBarItems(trailing: Button(action: {
-                    self.isSignOut = true
-                    do {
-                        try Auth.auth().signOut()
-                    } catch let signOutError as NSError {
-                        print ("Error signing out: %@", signOutError)
-                    }
+                    signOut()
                 }, label: {
                     Image(systemName:"arrow.right.circle.fill")
                 }))
@@ -122,12 +127,22 @@ struct HomeView: View {
     func GetUserName() -> String{
         return self.userInfo.name as! String
     }
+    
+    func navigateToScoresUI() {
+        transitionToUIKit(viewControllerName: "RootNavigationScores")
+    }
+    
     func navigateToPresentationUI(mode: PresentationMode = .presenting) {
         var viewControllerName = "RootNavigationTraining"
         if mode == .presenting {
             viewControllerName = "RootNavigation"
         }
         
+        highScorePassed = highScore
+        transitionToUIKit(viewControllerName: viewControllerName)
+    }
+    
+    func transitionToUIKit(viewControllerName: String) {
         if let window = UIApplication.shared.windows.first {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let viewController = storyboard.instantiateViewController(identifier: viewControllerName)
@@ -137,6 +152,7 @@ struct HomeView: View {
             UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromRight, animations: nil, completion: nil)
         }
     }
+    
     func getScore(){
         let db = Firestore.firestore()
         let userid = Auth.auth().currentUser?.uid
@@ -157,8 +173,25 @@ struct HomeView: View {
                             self.highScore = Int(score.dropLast())!
                         }
                     }
-                    self.lastScore = scores[0]
+                    
+                    if scores.count == 0 {
+                        self.lastScore = "0%"
+                        self.highScore = 0
+                        self.noScores = true
+                    } else {
+                        self.lastScore = scores[0]
+                        self.noScores = false
+                    }
                 }
+        }
+    }
+    
+    func signOut() {
+        self.isSignOut = true
+        do {
+            try Auth.auth().signOut()
+        } catch let signOutError as NSError {
+            print ("Error signing out: %@", signOutError)
         }
     }
 }

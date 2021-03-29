@@ -25,9 +25,11 @@ class FeedbackViewController: UIViewController {
     var totalSmiles = 0
     var totalHandMoves = 0
     var totalLooks = 0
+    var timestamp: Date?
     
     var mode: FeedbackMode = .new
     var videoURL: URL?
+    var highScore = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,8 +37,24 @@ class FeedbackViewController: UIViewController {
         navigationController?.setNavigationBarHidden(true, animated: false)
         btnHome.layer.cornerRadius = 15.0
         
-        if mode == .new && videoURL != nil {
-            videoURL = processRecordedVideo(originalURL: videoURL!, timestamp: Date())
+        if mode == .new {
+            timestamp = Date()
+            if videoURL != nil {
+                videoURL = processRecordedVideo(originalURL: videoURL!, timestamp: timestamp!)
+            }
+        } else {
+            btnHome.setTitle("BACK", for: .normal)
+            
+            if let timestamp = timestamp,
+               let documentRoot = getDocumentRoot(),
+               let UID = Auth.auth().currentUser?.uid {
+                let dateString = formatTime(timestamp: timestamp)
+                let newDir = documentRoot.appendingPathComponent("Videos").appendingPathComponent("\(dateString)_\(UID).mp4")
+                
+                if FileManager.default.fileExists(atPath: newDir.path) {
+                    videoURL = newDir
+                }
+            }
         }
         
         var totalScore = 0, avgScore = 0
@@ -79,22 +97,22 @@ class FeedbackViewController: UIViewController {
         
         avgScore = totalScore / 3
         lblTotalScore.text = "\(avgScore)%"
-        storeVars()
+        lblRank.text = "\(highScore)%"
+        
+        if mode == .new {
+            storeVars()
+        }
     }
     
     @IBAction func btnHomeClicked(_ sender: UIButton) {
-        if let URL = videoURL {
-            do {
-                try FileManager.default.removeItem(at: URL)
-            } catch let e {
-                print(e)
+        if mode == .new {
+            if let window = UIApplication.shared.windows.first {
+                window.rootViewController = UIHostingController(rootView: ContentView().environmentObject(userInfo))
+                window.makeKeyAndVisible()
+                UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: nil, completion: nil)
             }
-        }
-        
-        if let window = UIApplication.shared.windows.first {
-            window.rootViewController = UIHostingController(rootView: ContentView().environmentObject(userInfo))
-            window.makeKeyAndVisible()
-            UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: nil, completion: nil)
+        } else {
+            navigationController?.popViewController(animated: true)
         }
     }
     
@@ -122,15 +140,27 @@ class FeedbackViewController: UIViewController {
         PresentationTipViewController.showView(self, mode: .eyeContact)
     }
     
-    func processRecordedVideo(originalURL: URL, timestamp: Date) -> URL? {
+    func formatTime(timestamp: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd-HHmmss"
+        let dateString = formatter.string(from: timestamp)
+        
+        return dateString
+    }
+    
+    func getDocumentRoot() -> URL? {
         let documentRoots = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         guard let documentRoot = documentRoots.first else {
             return nil
         }
-        
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyyMMdd-HHmmss"
-        let dateString = formatter.string(from: timestamp)
+        return documentRoot
+    }
+    
+    func processRecordedVideo(originalURL: URL, timestamp: Date) -> URL? {
+        guard let documentRoot = getDocumentRoot() else {
+            return nil
+        }
+        let dateString = formatTime(timestamp: timestamp)
         
         let newDir = documentRoot.appendingPathComponent("Videos")
         do {
@@ -221,10 +251,11 @@ class FeedbackViewController: UIViewController {
         
         return (Int(score), feedback)
     }
+    
     func storeVars(){
         let userid = Auth.auth().currentUser!.uid
         let db = Firestore.firestore()
-        let timestamp = Int(NSDate().timeIntervalSince1970)
+        let timestamp = Int(self.timestamp!.timeIntervalSince1970)
         
         var ref: DocumentReference? = nil
         ref = db.collection("grades").addDocument(data: [

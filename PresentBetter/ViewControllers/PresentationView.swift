@@ -88,11 +88,15 @@ class PresentationViewController: UIViewController {
     var frames = 0
     var indicatorTimer: Timer?
     
+    // Information passed to Feedback View
+    var highScore = 0
+    
     // MARK: - View lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        highScore = highScorePassed
         navigationController?.setNavigationBarHidden(true, animated: false)
         
         supportsDepthCamera = ARFaceTrackingConfiguration.isSupported
@@ -451,6 +455,8 @@ extension PresentationViewController {
             feedbackView.totalHandMoves = totalHandMoves
             feedbackView.totalLooks = totalLooks
             feedbackView.videoURL = videoURL
+            feedbackView.highScore = highScore
+            feedbackView.mode = .new
         } else if segue.identifier == "forwardToTrainingResult" {
             let resultView = segue.destination as! TrainingResultViewController
             if mode == .trainingFacial {
@@ -491,7 +497,7 @@ extension PresentationViewController {
         if mode == .presenting {
             lblCountdown.text = "00:15"
         } else {
-            lblCountdown.text = "00:30"
+            lblCountdown.text = "00:20"
         }
     }
     
@@ -532,7 +538,7 @@ extension PresentationViewController {
             if mode == .presenting {
                 countdown = 30
             } else {
-                countdown = 60
+                countdown = 40
             }
             state = .presenting
             let _ = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: presentationCountdown)
@@ -608,11 +614,11 @@ extension PresentationViewController {
         var windowTrainingState: TrainingState
         
         if mode == .trainingFacial {
-            tips = ["Smile more.", "Great! Keep doing.", "Smile less."]
+            tips = ["Smile more.", "Great! Keep going.", "Smile less."]
         } else if mode == .trainingGesture {
-            tips = ["Move your arms more.", "Great! Keep doing.", "Move your arms less."]
+            tips = ["Move your arms more.", "Great! Keep going.", "Move your arms less."]
         } else {
-            tips = ["Look at camera more.", "Great! Keep doing.", "Look at camera less."]
+            tips = ["Look at camera more.", "Great! Keep going.", "Look at camera less."]
         }
         
         if recentFeedbacks.count >= 10 {

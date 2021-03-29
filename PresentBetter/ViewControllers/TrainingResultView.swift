@@ -12,19 +12,19 @@ class TrainingResultViewController: UIViewController {
     var userInfo = UserInfo()
     
     let facialTips = [
-        "Work Hard!\nYou need to smile more frequently.",
+        "Keep Going!\nYou need to smile more frequently.",
         "Good Job!\nExcellent facial expressions!",
         "Good Job!\nNext time, try to smile a little bit less."
     ]
     
     let gestureTips = [
-        "Work Hard!\nYou need to move your hands more frequently.",
+        "Keep Going!\nYou need to move your hands more frequently.",
         "Good Job!\nExcellent gestures!",
         "Good Job!\nNext time, try to move your hands a little bit less."
     ]
     
     let eyeContactTips = [
-        "Work Hard!\nYou need to look at the camera more frequently.",
+        "Keep Going!\nYou need to look at the camera more frequently.",
         "Good Job!\nExcellent eye contact!",
         "Good Job!\nNext time, try not to look at the camera the entire time."
     ]
@@ -47,9 +47,9 @@ class TrainingResultViewController: UIViewController {
             tipText = eyeContactTips
         }
         
-        if totalPasses < 30 {
+        if totalPasses < 20 {
             lblTip.text = tipText[0]
-        } else if totalPasses >= 30 && totalPasses <= 48 {
+        } else if totalPasses >= 20 && totalPasses <= 32 {
             lblTip.text = tipText[1]
         } else {
             lblTip.text = tipText[2]
