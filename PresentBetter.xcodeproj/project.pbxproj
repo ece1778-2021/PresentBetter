@@ -21,6 +21,8 @@
 		3E7535684384A1302C799024 /* Pods_PresentBetter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3011A6E479955BD9FE8E02C9 /* Pods_PresentBetter.framework */; };
 		E50160AF25E827BF0040966F /* Spartan-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E50160AE25E827BF0040966F /* Spartan-Bold.ttf */; };
 		E5134B5A25E83A6F0098C7E6 /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5134B5925E83A6F0098C7E6 /* AlertView.swift */; };
+		E51A4B5D26224687002F1869 /* NotificationSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51A4B5C26224687002F1869 /* NotificationSettingsView.swift */; };
+		E51A4B5F26225BA0002F1869 /* DSEG7Modern-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E51A4B5A26224140002F1869 /* DSEG7Modern-Regular.ttf */; };
 		E5229BBC2612863800573034 /* HistoricalScoresView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5229BBB2612863800573034 /* HistoricalScoresView.swift */; };
 		E53996D925E99C2D00F38FE2 /* EyeCalibrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53996D825E99C2D00F38FE2 /* EyeCalibrationView.swift */; };
 		E53AE91E25E80BF400479BF1 /* CustomGraphics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53AE91D25E80BF400479BF1 /* CustomGraphics.swift */; };
@@ -40,6 +42,10 @@
 		E5ABA5CF2606B5E9007E7278 /* AreaSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5ABA5CE2606B5E9007E7278 /* AreaSelectionView.swift */; };
 		E5B7DDE125DA43CF00EBE2E5 /* emotion_image_input.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = E5B7DDE025DA43CF00EBE2E5 /* emotion_image_input.mlmodel */; };
 		E5B7DDE425DAC49100EBE2E5 /* MLProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B7DDE325DAC49100EBE2E5 /* MLProvider.swift */; };
+		E5C964F62620DBA100AA80E4 /* Speech.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C964F52620DBA100AA80E4 /* Speech.swift */; };
+		E5C9650E26221B3D00AA80E4 /* PresentationReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C9650D26221B3D00AA80E4 /* PresentationReportView.swift */; };
+		E5C9651226221BF100AA80E4 /* NonverbalProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C9651126221BF100AA80E4 /* NonverbalProvider.swift */; };
+		E5C96516262222D800AA80E4 /* VerbalProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C96515262222D800AA80E4 /* VerbalProvider.swift */; };
 		E5D1B144260801C9002CD603 /* TrainingResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5D1B143260801C9002CD603 /* TrainingResultView.swift */; };
 		E5D2723E25E351400026CF41 /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5D2723D25E351400026CF41 /* FeedbackView.swift */; };
 		E5D427602607ECAF00714D7A /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E5D4275F2607ECAF00714D7A /* Montserrat-Regular.ttf */; };
@@ -74,6 +80,8 @@
 		E5134B5225E833C50098C7E6 /* PresentBetter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PresentBetter.png; sourceTree = "<group>"; };
 		E5134B5625E835410098C7E6 /* ShapeArt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ShapeArt.png; sourceTree = "<group>"; };
 		E5134B5925E83A6F0098C7E6 /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
+		E51A4B5A26224140002F1869 /* DSEG7Modern-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DSEG7Modern-Regular.ttf"; sourceTree = "<group>"; };
+		E51A4B5C26224687002F1869 /* NotificationSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsView.swift; sourceTree = "<group>"; };
 		E5229BBB2612863800573034 /* HistoricalScoresView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoricalScoresView.swift; sourceTree = "<group>"; };
 		E53996D825E99C2D00F38FE2 /* EyeCalibrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeCalibrationView.swift; sourceTree = "<group>"; };
 		E53AE91D25E80BF400479BF1 /* CustomGraphics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomGraphics.swift; sourceTree = "<group>"; };
@@ -93,6 +101,10 @@
 		E5ABA5CE2606B5E9007E7278 /* AreaSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AreaSelectionView.swift; sourceTree = "<group>"; };
 		E5B7DDE025DA43CF00EBE2E5 /* emotion_image_input.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = emotion_image_input.mlmodel; sourceTree = "<group>"; };
 		E5B7DDE325DAC49100EBE2E5 /* MLProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLProvider.swift; sourceTree = "<group>"; };
+		E5C964F52620DBA100AA80E4 /* Speech.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Speech.swift; sourceTree = "<group>"; };
+		E5C9650D26221B3D00AA80E4 /* PresentationReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationReportView.swift; sourceTree = "<group>"; };
+		E5C9651126221BF100AA80E4 /* NonverbalProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonverbalProvider.swift; sourceTree = "<group>"; };
+		E5C96515262222D800AA80E4 /* VerbalProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerbalProvider.swift; sourceTree = "<group>"; };
 		E5D1B143260801C9002CD603 /* TrainingResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingResultView.swift; sourceTree = "<group>"; };
 		E5D2723D25E351400026CF41 /* FeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackView.swift; sourceTree = "<group>"; };
 		E5D4275F2607ECAF00714D7A /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Regular.ttf"; sourceTree = "<group>"; };
@@ -164,6 +176,8 @@
 				E5D427622607EF1400714D7A /* PresentationTipView.swift */,
 				E5D1B143260801C9002CD603 /* TrainingResultView.swift */,
 				E5229BBB2612863800573034 /* HistoricalScoresView.swift */,
+				E5C9650D26221B3D00AA80E4 /* PresentationReportView.swift */,
+				E51A4B5C26224687002F1869 /* NotificationSettingsView.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -183,6 +197,7 @@
 				E5DEE73725EB0AB900BE0E1F /* FacialExpression.swift */,
 				E5DEE73225EABB1400BE0E1F /* HandPose.swift */,
 				E5B7DDE325DAC49100EBE2E5 /* MLProvider.swift */,
+				E5C964F52620DBA100AA80E4 /* Speech.swift */,
 			);
 			path = Processors;
 			sourceTree = "<group>";
@@ -198,6 +213,7 @@
 		E5914D7825E75116009A0BC0 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				E51A4B5A26224140002F1869 /* DSEG7Modern-Regular.ttf */,
 				E5914D8225E7577B009A0BC0 /* Now-Medium.otf */,
 				E5914D7925E7512D009A0BC0 /* Now-Regular.otf */,
 				E5914D7C25E752D5009A0BC0 /* Now-Bold.otf */,
@@ -237,6 +253,7 @@
 				E5134B5F25E84AD70098C7E6 /* Delegates */,
 				E5134B5E25E84ABE0098C7E6 /* Processors */,
 				E5134B5D25E84AAA0098C7E6 /* Graphics */,
+				E5C9651026221BD900AA80E4 /* Providers */,
 				E5134B5C25E84A880098C7E6 /* ViewControllers */,
 				E5134B4E25E833B40098C7E6 /* Images */,
 				E5914D7825E75116009A0BC0 /* Fonts */,
@@ -249,6 +266,15 @@
 				E5E38A2526014E3D00571727 /* monkey.mp4 */,
 			);
 			path = PresentBetter;
+			sourceTree = "<group>";
+		};
+		E5C9651026221BD900AA80E4 /* Providers */ = {
+			isa = PBXGroup;
+			children = (
+				E5C9651126221BF100AA80E4 /* NonverbalProvider.swift */,
+				E5C96515262222D800AA80E4 /* VerbalProvider.swift */,
+			);
+			path = Providers;
 			sourceTree = "<group>";
 		};
 		FF0D2600EC74ECD48972D8E9 /* Pods */ = {
@@ -332,6 +358,7 @@
 				E5914D8625E758D0009A0BC0 /* Oswald-VariableFont_wght.ttf in Resources */,
 				E59A21A925D89CE7009E0082 /* Assets.xcassets in Resources */,
 				E5914D8925E75941009A0BC0 /* Lato-Bold.ttf in Resources */,
+				E51A4B5F26225BA0002F1869 /* DSEG7Modern-Regular.ttf in Resources */,
 				E59A21A725D89CE5009E0082 /* Main.storyboard in Resources */,
 				E50160AF25E827BF0040966F /* Spartan-Bold.ttf in Resources */,
 				E5DEE73D25EB145900BE0E1F /* PresentBetter.png in Resources */,
@@ -391,16 +418,19 @@
 				E59A21A425D89CE5009E0082 /* PresentationView.swift in Sources */,
 				14DE2E9525F782050064982A /* ContentView.swift in Sources */,
 				14DE2E9025F782050064982A /* LoginView.swift in Sources */,
+				E51A4B5D26224687002F1869 /* NotificationSettingsView.swift in Sources */,
 				14DE2E9325F782050064982A /* PresentationViewSUI.swift in Sources */,
 				14DE2EAC25F786E20064982A /* KeyboardAvoid.swift in Sources */,
 				E53AE92125E811F300479BF1 /* PresentationPreparationView.swift in Sources */,
 				E5E38A22260148FC00571727 /* PlaybackView.swift in Sources */,
 				E5F94B4B25FEF60600F9DCD5 /* SceneDelegate.swift in Sources */,
 				E59A21A425D89CE5009E0082 /* PresentationView.swift in Sources */,
+				E5C9650E26221B3D00AA80E4 /* PresentationReportView.swift in Sources */,
 				E5134B5A25E83A6F0098C7E6 /* AlertView.swift in Sources */,
 				E53996D925E99C2D00F38FE2 /* EyeCalibrationView.swift in Sources */,
 				141B29F0260DD06F00CDF517 /* UserInfo.swift in Sources */,
 				E5DEE73825EB0AB900BE0E1F /* FacialExpression.swift in Sources */,
+				E5C9651226221BF100AA80E4 /* NonverbalProvider.swift in Sources */,
 				E59A21A025D89CE5009E0082 /* (null) in Sources */,
 				E5229BBC2612863800573034 /* HistoricalScoresView.swift in Sources */,
 				E59A21A225D89CE5009E0082 /* (null) in Sources */,
@@ -409,12 +439,14 @@
 				E5DEE73025EA967F00BE0E1F /* EyeTrack.swift in Sources */,
 				141B29FE2611E3A100CDF517 /* ScoresView.swift in Sources */,
 				E53AE91E25E80BF400479BF1 /* CustomGraphics.swift in Sources */,
+				E5C96516262222D800AA80E4 /* VerbalProvider.swift in Sources */,
 				E5D427632607EF1400714D7A /* PresentationTipView.swift in Sources */,
 				E5B7DDE425DAC49100EBE2E5 /* MLProvider.swift in Sources */,
 				14DE2E9425F782050064982A /* SignupView.swift in Sources */,
 				E5D2723E25E351400026CF41 /* FeedbackView.swift in Sources */,
 				14DE2EB325F7881D0064982A /* PresentBetterApp.swift in Sources */,
 				E5DEE73325EABB1400BE0E1F /* HandPose.swift in Sources */,
+				E5C964F62620DBA100AA80E4 /* Speech.swift in Sources */,
 				14F6AA8525FF6F55004FE096 /* LoadingView.swift in Sources */,
 				E5ABA5CF2606B5E9007E7278 /* AreaSelectionView.swift in Sources */,
 			);

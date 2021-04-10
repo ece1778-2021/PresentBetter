@@ -2,6 +2,7 @@ import ARKit
 import ARVideoKit
 import AVFoundation
 import CoreML
+import Speech
 import UIKit
 import Vision
 
@@ -14,6 +15,7 @@ enum PresentationMode {
     case trainingFacial
     case trainingEye
     case trainingGesture
+    case trainingSpeech
     case presenting
 }
 
@@ -21,6 +23,11 @@ enum TrainingState {
     case tooFew
     case good
     case tooMuch
+}
+
+struct SpeechWords {
+    var totalLength: Int
+    var atTime: Int
 }
 
 func deg(_ rad: Float) -> Float {
@@ -58,6 +65,7 @@ class PresentationViewController: UIViewController {
     // Indicates if AVCaptureSession configuration is successful
     var accessSuccessful = false
     var configSuccessful = false
+    var isSpeechAble = false
     
     // UIImage representation of captured CVPixelBuffer
     var captureImage: UIImage?
@@ -68,14 +76,17 @@ class PresentationViewController: UIViewController {
     var eyeContactSession: EyeContactSession!
     var facialExpressionSession: FacialExpressionSession!
     var handPoseSession: HandPoseSession!
+    var speechSession: SpeechSession!
     
     // Presentation parameters
     var mode: PresentationMode = .presenting    // Presentation mode: Training or Presenting?
     var state: PresentationState = .preparing
     var countdown = 5
+    var countdownMax = 30
     var smiledInSpan = false, totalSmiles = 0
     var handMovedInSpan = false, totalHandMoves = 0
     var focusDetected = 0, lostFocusDetected = 0, totalLooks = 0
+    var averageWordsPerMinute: CGFloat = 0
     var isPresentationRecorded = true
     
     // Training parameters
@@ -83,6 +94,10 @@ class PresentationViewController: UIViewController {
     var trainingState: TrainingState = .good
     var recentTrainingState = [TrainingState]()
     var firstReachWindow = false
+    
+    // Speech training parameters
+    var recognizedWords = [SpeechWords]()
+    var recognitionFinishSignal: DispatchSemaphore?
     
     // Performance metrics: Number of frames processed during a session
     var frames = 0
@@ -114,6 +129,7 @@ class PresentationViewController: UIViewController {
         
         facialExpressionSession = FacialExpressionSession(boundingFrame: view.frame)
         handPoseSession = HandPoseSession()
+        speechSession = SpeechSession()
         
         if supportsDepthCamera {
             sceneView.layer.addSublayer(roundRectLayer)
@@ -135,6 +151,7 @@ class PresentationViewController: UIViewController {
         resetPresentationCountdown()
         DispatchQueue.main.async {
             if self.supportsDepthCamera {
+                self.isSpeechAble = self.speechSession.initializeSpeechRecognition()
                 self.initializeAVAudio()
                 self.tryStartPresentation = true
                 self.startARSession()
@@ -301,16 +318,6 @@ class PresentationViewController: UIViewController {
         if emotionPrediction == .Happy {
             smiledInSpan = true
         }
-        
-        /*
-        DispatchQueue.main.async {
-            if let imageBoundingBox = self.facialExpressionSession.imageBoundingBox {
-                let path = UIBezierPath(roundedRect: imageBoundingBox, cornerRadius: 0)
-                self.roundRectLayer.isHidden = false
-                self.roundRectLayer.path = path.cgPath
-            }
-        }
-         */
     }
     
     // MARK: - Body pose detection
@@ -330,6 +337,33 @@ class PresentationViewController: UIViewController {
         let handMoved = handPoseSession.updateDataAndEvaluateDetectionResult(withBodyKeyPoints: points)
         if handMoved {
             handMovedInSpan = true
+        }
+    }
+    
+    // MARK: - Speech recognition session
+    func processSpeechRecognition(result: SFSpeechRecognitionResult?, error: Error?) {
+        if let result = result {
+            let segments = result.bestTranscription.segments
+            
+            if result.isFinal {
+                print(result.bestTranscription.formattedString)
+                if segments.count > 0 {
+                    let duration = CGFloat(segments.last!.timestamp + segments.last!.duration - segments.first!.timestamp)
+                    if duration > 0 {
+                        averageWordsPerMinute = CGFloat(segments.count) / duration * 60
+                    } else {
+                        averageWordsPerMinute = 0
+                    }
+                } else {
+                    averageWordsPerMinute = 0
+                }
+                
+                recognitionFinishSignal?.signal()
+            }
+            
+            recognizedWords.append(SpeechWords(totalLength: segments.count, atTime: countdown))
+        } else if error != nil {
+            recognitionFinishSignal?.signal()
         }
     }
     
@@ -449,13 +483,14 @@ extension PresentationViewController: AVCaptureVideoDataOutputSampleBufferDelega
 
 extension PresentationViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "forwardToFeedback" {
-            let feedbackView = segue.destination as! FeedbackViewController
+        if segue.identifier == "forwardToReport" {
+            let feedbackView = segue.destination as! PresentationReportViewController
             feedbackView.totalSmiles = totalSmiles
             feedbackView.totalHandMoves = totalHandMoves
             feedbackView.totalLooks = totalLooks
             feedbackView.videoURL = videoURL
             feedbackView.highScore = highScore
+            feedbackView.averageWordsPerMinute = averageWordsPerMinute
             feedbackView.mode = .new
         } else if segue.identifier == "forwardToTrainingResult" {
             let resultView = segue.destination as! TrainingResultViewController
@@ -468,6 +503,10 @@ extension PresentationViewController {
             } else if mode == .trainingEye {
                 resultView.mode = .eyeContact
                 resultView.totalPasses = totalLooks
+            } else if mode == .trainingSpeech {
+                resultView.mode = .speech
+                resultView.averageWordsPerMinute = Int(averageWordsPerMinute)
+                print("Average speech pace: \(averageWordsPerMinute) wpm")
             }
         }
     }
@@ -475,6 +514,7 @@ extension PresentationViewController {
     func resetPresentationCountdown() {
         frames = 0
         countdown = 5
+        countdownMax = 30
         smiledInSpan = false
         totalSmiles = 0
         handMovedInSpan = false
@@ -482,6 +522,8 @@ extension PresentationViewController {
         focusDetected = 0
         lostFocusDetected = 0
         totalLooks = 0
+        recognizedWords.removeAll()
+        averageWordsPerMinute = 0
         state = .preparing
         
         recentFeedbacks.removeAll()
@@ -537,9 +579,17 @@ extension PresentationViewController {
             
             if mode == .presenting {
                 countdown = 30
+                countdownMax = 30
             } else {
                 countdown = 40
+                countdownMax = 40
             }
+            
+            if isSpeechAble {
+                let _ = speechSession.startRecognition(responseHandler: processSpeechRecognition)
+                recognizedWords.append(SpeechWords(totalLength: 0, atTime: countdownMax))
+            }
+            
             state = .presenting
             let _ = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: presentationCountdown)
         }
@@ -594,17 +644,101 @@ extension PresentationViewController {
         focusDetected = 0
         lostFocusDetected = 0
         
+        if mode == .trainingSpeech {
+            processSpeechTrainingData()
+        }
+        
         if countdown == 0 {
             timer.invalidate()
+            speechSession.stopRecognition()
             
             if supportsDepthCamera && isPresentationRecorded {
                 recorder?.stop() { videoURL in
                     DispatchQueue.main.async {
-                        self.forwardToFeedback(videoURL: videoURL)
+                        self.waitForSpeechRecognitionAndForwardToFeedback(videoURL: videoURL)
                     }
                 }
             } else {
-                self.forwardToFeedback(videoURL: nil)
+                self.waitForSpeechRecognitionAndForwardToFeedback(videoURL: nil)
+            }
+        }
+    }
+    
+    func waitForSpeechRecognitionAndForwardToFeedback(videoURL: URL?) {
+        if recognizedWords.count > 0 {
+            DispatchQueue(label: "waitForSpeechRecognition").async {
+                self.recognitionFinishSignal = DispatchSemaphore(value: 0)
+                
+                DispatchQueue.main.async {
+                    LoadingViewController.showView(self)
+                }
+                
+                let _ = self.recognitionFinishSignal?.wait(timeout: .now() + 60)
+                
+                DispatchQueue.main.async {
+                    self.presentedViewController?.dismiss(animated: true) {
+                        self.forwardToFeedback(videoURL: videoURL)
+                    }
+                }
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.forwardToFeedback(videoURL: videoURL)
+            }
+        }
+    }
+    
+    func processSpeechTrainingData() {
+        let tips = ["Speak faster.", "Great! Keep going.", "Speak slower."]
+        var windowTrainingState: TrainingState
+        
+        if recognizedWords.count > 0 {
+            if recognizedWords.first!.atTime - countdown >= 10 {
+                let slice = recognizedWords.filter { $0.atTime - countdown <= 10 }
+                
+                let newTip: String
+                let wordsPerMinute: CGFloat
+                if slice.count > 0 {
+                    if slice.last!.totalLength >= slice.first!.totalLength {
+                        wordsPerMinute = CGFloat(slice.last!.totalLength - slice.first!.totalLength) / 4.8 * 60.0
+                    } else {
+                        wordsPerMinute = 150
+                    }
+                } else {
+                    wordsPerMinute = 0
+                }
+                
+                if wordsPerMinute < 140 {
+                    newTip = tips[0]
+                    windowTrainingState = .tooFew
+                    recentTrainingState.append(.tooFew)
+                } else if wordsPerMinute >= 140 && wordsPerMinute <= 160 {
+                    newTip = tips[1]
+                    windowTrainingState = .good
+                    recentTrainingState.append(.good)
+                } else {
+                    newTip = tips[2]
+                    windowTrainingState = .tooMuch
+                    recentTrainingState.append(.tooMuch)
+                }
+                
+                if recentTrainingState.count > 10 {
+                    recentTrainingState.removeFirst()
+                }
+                
+                if firstReachWindow == false {
+                    firstReachWindow = true
+                    trainingState = windowTrainingState
+                    animateTip(firstTip: true, newTip: newTip)
+                } else {
+                    if recentTrainingState.count >= 2 {
+                        let mostRecentTrainingState = recentTrainingState.suffix(2)
+                        if windowTrainingState != trainingState && (mostRecentTrainingState.filter { $0 == windowTrainingState }.count == 2) {
+                            trainingStateTransition(newState: windowTrainingState)
+                            animateTip(firstTip: false, newTip: newTip)
+                        }
+                    }
+                }
             }
         }
     }
@@ -707,7 +841,7 @@ extension PresentationViewController {
         }
         
         if mode == .presenting {
-            self.performSegue(withIdentifier: "forwardToFeedback", sender: self)
+            self.performSegue(withIdentifier: "forwardToReport", sender: self)
         } else {
             self.performSegue(withIdentifier: "forwardToTrainingResult", sender: self)
         }

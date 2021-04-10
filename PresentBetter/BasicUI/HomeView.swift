@@ -34,6 +34,15 @@ struct HomeView: View {
                             .foregroundColor(.white)
                             .font(.custom("Spartan-Bold", size: 45))
                             .multilineTextAlignment(.center)
+                        Button(action: {
+                            navigateToSettings()
+                        }, label: {
+                            Image("AlarmClockWithDigits")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 64, height: 64, alignment: .center)
+                                .foregroundColor(.white)
+                        })
                         Spacer()
                         HStack{
                             Spacer()
@@ -130,6 +139,11 @@ struct HomeView: View {
     
     func navigateToScoresUI() {
         transitionToUIKit(viewControllerName: "RootNavigationScores")
+    }
+    
+    func navigateToSettings() {
+        let viewControllerName = "RootNavigationSettings"
+        transitionToUIKit(viewControllerName: viewControllerName)
     }
     
     func navigateToPresentationUI(mode: PresentationMode = .presenting) {

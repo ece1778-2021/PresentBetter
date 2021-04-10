@@ -17,6 +17,7 @@ class HistoricalScoresViewController: UIViewController, UITableViewDelegate, UIT
     var totalSmiles = [Int]()
     var totalHandMoves = [Int]()
     var totalLooks = [Int]()
+    var averageWordsPerMinute = [CGFloat]()
     
     var navigateToIndex = 0
     
@@ -37,12 +38,13 @@ class HistoricalScoresViewController: UIViewController, UITableViewDelegate, UIT
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "forwardToFeedback" {
-            if let viewController = segue.destination as? FeedbackViewController {
+        if segue.identifier == "forwardToReport" {
+            if let viewController = segue.destination as? PresentationReportViewController {
                 viewController.timestamp = timestampsRaw[navigateToIndex]
                 viewController.totalSmiles = totalSmiles[navigateToIndex]
                 viewController.totalLooks = totalLooks[navigateToIndex]
                 viewController.totalHandMoves = totalHandMoves[navigateToIndex]
+                viewController.averageWordsPerMinute = averageWordsPerMinute[navigateToIndex]
                 viewController.highScore = highScore
                 viewController.mode = .viewExisting
             }
@@ -52,7 +54,7 @@ class HistoricalScoresViewController: UIViewController, UITableViewDelegate, UIT
     @objc func forwardToFeedback(sender: UITapGestureRecognizer) {
         if let tag = sender.view?.tag {
             navigateToIndex = tag - 100
-            performSegue(withIdentifier: "forwardToFeedback", sender: self)
+            performSegue(withIdentifier: "forwardToReport", sender: self)
         }
     }
     
@@ -80,10 +82,12 @@ class HistoricalScoresViewController: UIViewController, UITableViewDelegate, UIT
                         let totalLooks = document.data()["totalLooks"] as! Int
                         let totalSmiles = document.data()["totalSmiles"] as! Int
                         let totalHandMoves = document.data()["totalHandMoves"] as! Int
+                        let averageWordsPerMinute: CGFloat = document.data()["wordsPerMinute"] as? CGFloat ?? 0
                         
                         self.totalLooks.append(totalLooks)
                         self.totalSmiles.append(totalSmiles)
                         self.totalHandMoves.append(totalHandMoves)
+                        self.averageWordsPerMinute.append(averageWordsPerMinute)
                         
                         self.timestamps.append(self.changeTimestamp(timeStamp: timestamp))
                         let timestampRaw = Date(timeIntervalSince1970: TimeInterval(timestamp))

@@ -5,6 +5,7 @@ class AreaSelectionViewController: UIViewController {
     @IBOutlet var btnFacialExpressions: UIButton!
     @IBOutlet var btnEyeContact: UIButton!
     @IBOutlet var btnGestures: UIButton!
+    @IBOutlet var btnSpeech: UIButton!
     @IBOutlet var btnHome: UIButton!
     
     var mode: PresentationMode = .trainingFacial
@@ -16,6 +17,7 @@ class AreaSelectionViewController: UIViewController {
         btnFacialExpressions.layer.cornerRadius = 45
         btnEyeContact.layer.cornerRadius = 45
         btnGestures.layer.cornerRadius = 45
+        btnSpeech.layer.cornerRadius = 45
         btnHome.layer.cornerRadius = 17.0
         
         navigationController?.setNavigationBarHidden(true, animated: false)
@@ -54,4 +56,8 @@ class AreaSelectionViewController: UIViewController {
         performSegue(withIdentifier: "forwardToPresentation", sender: self)
     }
     
+    @IBAction func btnSpeechClicked(_ sender: UIButton) {
+        mode = .trainingSpeech
+        performSegue(withIdentifier: "forwardToPresentation", sender: self)
+    }
 }

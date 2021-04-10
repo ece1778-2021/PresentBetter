@@ -4,6 +4,7 @@ import UIKit
 extension Notification {
     static let popoverDismissed = Notification.Name("popoverDismissed")
     static let presentationVideoDeleted = Notification.Name("presentationVideoDeleted")
+    static let localNotificationSet = Notification.Name("localNotificationSet")
 }
 
 class PresentationPreparationViewController: UIViewController {

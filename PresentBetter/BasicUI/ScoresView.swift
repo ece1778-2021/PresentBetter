@@ -87,6 +87,7 @@ struct ScoresView: View {
     }
     
     func navigateToFeedbackUI(item: Int) {
+        /*
         if let window = UIApplication.shared.windows.first {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             guard let viewController = storyboard.instantiateViewController(identifier: "FeedbackViewController") as? FeedbackViewController else {
@@ -103,6 +104,7 @@ struct ScoresView: View {
             window.makeKeyAndVisible()
             UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromRight, animations: nil, completion: nil)
         }
+        */
     }
     
     func getScore(){

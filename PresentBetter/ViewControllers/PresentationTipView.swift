@@ -5,6 +5,7 @@ enum PresentationTipMode {
     case facialExpression
     case gesture
     case eyeContact
+    case speech
 }
 
 class PresentationTipViewController: UIViewController {
@@ -17,7 +18,8 @@ class PresentationTipViewController: UIViewController {
     let tips: [PresentationTipMode: String] = [
         .facialExpression: "Avoid a blank face by smiling from time to time to show the audience you are human.\n\nSmiling will also engage your audience and show them you are passionate about your subject matter.\n\nHowever, do not smile the entire presentation. This looks insincere.",
         .gesture: "\"Show what you are saying, move your hands. Audiences listen with their ears and their eyes\" (Neff, 2020).\n\nMoving your hands during a virtual presentation will also make your more dynamic and your presentation less boring.\n\nHowever, do not move your hands too much. This could distract your audience from the focus of your presentation.",
-        .eyeContact: "Eye contact invites your audience into your presentation.\n\nHowever, eye contact can be tricky in a virtual presentation because you are not actually looking at another person \"in the eye.\"\n\nTo make eye contact online, you need to look into the camera from time to time, likely about 50-75% of the presentation."
+        .eyeContact: "Eye contact invites your audience into your presentation.\n\nHowever, eye contact can be tricky in a virtual presentation because you are not actually looking at another person \"in the eye.\"\n\nTo make eye contact online, you need to look into the camera from time to time, likely about 50-75% of the presentation.",
+        .speech: "Speech pace refers to how quickly or how slowly you speak.\n\nIdeal pace is between 140-160 words per minute (wpm)\n\nIf you are speaking too quickly, it can be hard for your audience to understand what you are saying.\n\nIf you are speaking too slowly, your audience may lose interest in your presentation."
     ]
     
     override func viewDidLoad() {

@@ -9,6 +9,7 @@ class TrainingResultViewController: UIViewController {
     
     var mode: PresentationTipMode = .facialExpression
     var totalPasses = 0
+    var averageWordsPerMinute = 0
     var userInfo = UserInfo()
     
     let facialTips = [
@@ -29,6 +30,12 @@ class TrainingResultViewController: UIViewController {
         "Good Job!\nNext time, try not to look at the camera the entire time."
     ]
     
+    let speechTips = [
+        "It's better to speak a bit faster next time.",
+        "Good Job!\nExcellent speech pace!",
+        "It's better to speak a bit slower next time."
+    ]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -43,16 +50,28 @@ class TrainingResultViewController: UIViewController {
             tipText = facialTips
         } else if mode == .gesture {
             tipText = gestureTips
-        } else {
+        } else if mode == .eyeContact {
             tipText = eyeContactTips
+        } else {
+            tipText = speechTips
         }
         
-        if totalPasses < 20 {
-            lblTip.text = tipText[0]
-        } else if totalPasses >= 20 && totalPasses <= 32 {
-            lblTip.text = tipText[1]
+        if mode != .speech {
+            if totalPasses < 20 {
+                lblTip.text = tipText[0]
+            } else if totalPasses >= 20 && totalPasses <= 32 {
+                lblTip.text = tipText[1]
+            } else {
+                lblTip.text = tipText[2]
+            }
         } else {
-            lblTip.text = tipText[2]
+            if averageWordsPerMinute < 140 {
+                lblTip.text = tipText[0]
+            } else if averageWordsPerMinute >= 140 && averageWordsPerMinute <= 160 {
+                lblTip.text = tipText[1]
+            } else {
+                lblTip.text = tipText[2]
+            }
         }
     }
     
