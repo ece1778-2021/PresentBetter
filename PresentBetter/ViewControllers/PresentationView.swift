@@ -19,10 +19,15 @@ enum PresentationMode {
     case presenting
 }
 
-enum TrainingState {
-    case tooFew
-    case good
-    case tooMuch
+enum TrainingState: Int {
+    case tooFew = 0
+    case good = 1
+    case tooMuch = 2
+}
+
+struct SpeechTrainingStateCollection {
+    var trainingState: TrainingState
+    var atTime: Int
 }
 
 struct SpeechWords {
@@ -96,6 +101,7 @@ class PresentationViewController: UIViewController {
     var firstReachWindow = false
     
     // Speech training parameters
+    var recentSpeechTrainingState = [SpeechTrainingStateCollection]()
     var recognizedWords = [SpeechWords]()
     var recognitionFinishSignal: DispatchSemaphore?
     
@@ -351,11 +357,7 @@ class PresentationViewController: UIViewController {
                     let duration = CGFloat(segments.last!.timestamp + segments.last!.duration - segments.first!.timestamp)
                     if duration > 0 {
                         averageWordsPerMinute = CGFloat(segments.count) / duration * 60
-                    } else {
-                        averageWordsPerMinute = 0
                     }
-                } else {
-                    averageWordsPerMinute = 0
                 }
                 
                 recognitionFinishSignal?.signal()
@@ -666,6 +668,9 @@ extension PresentationViewController {
     
     func waitForSpeechRecognitionAndForwardToFeedback(videoURL: URL?) {
         if recognizedWords.count > 0 {
+            averageWordsPerMinute = CGFloat(recognizedWords.last!.totalLength - recognizedWords.first!.totalLength) / CGFloat(countdownMax) * 120.0
+            print(averageWordsPerMinute)
+            
             DispatchQueue(label: "waitForSpeechRecognition").async {
                 self.recognitionFinishSignal = DispatchSemaphore(value: 0)
                 
@@ -673,7 +678,7 @@ extension PresentationViewController {
                     LoadingViewController.showView(self)
                 }
                 
-                let _ = self.recognitionFinishSignal?.wait(timeout: .now() + 60)
+                let _ = self.recognitionFinishSignal?.wait(timeout: .now() + 5)
                 
                 DispatchQueue.main.async {
                     self.presentedViewController?.dismiss(animated: true) {
@@ -696,7 +701,7 @@ extension PresentationViewController {
             if recognizedWords.first!.atTime - countdown >= 10 {
                 let slice = recognizedWords.filter { $0.atTime - countdown <= 10 }
                 
-                let newTip: String
+                var newTip: String
                 let wordsPerMinute: CGFloat
                 if slice.count > 0 {
                     if slice.last!.totalLength >= slice.first!.totalLength {
@@ -709,32 +714,28 @@ extension PresentationViewController {
                 }
                 
                 if wordsPerMinute < 140 {
-                    newTip = tips[0]
                     windowTrainingState = .tooFew
                     recentTrainingState.append(.tooFew)
                 } else if wordsPerMinute >= 140 && wordsPerMinute <= 160 {
-                    newTip = tips[1]
                     windowTrainingState = .good
                     recentTrainingState.append(.good)
                 } else {
-                    newTip = tips[2]
                     windowTrainingState = .tooMuch
                     recentTrainingState.append(.tooMuch)
-                }
-                
-                if recentTrainingState.count > 10 {
-                    recentTrainingState.removeFirst()
                 }
                 
                 if firstReachWindow == false {
                     firstReachWindow = true
                     trainingState = windowTrainingState
+                    newTip = tips[trainingState.rawValue]
                     animateTip(firstTip: true, newTip: newTip)
                 } else {
                     if recentTrainingState.count >= 2 {
                         let mostRecentTrainingState = recentTrainingState.suffix(2)
                         if windowTrainingState != trainingState && (mostRecentTrainingState.filter { $0 == windowTrainingState }.count == 2) {
+                            recentTrainingState.removeAll()
                             trainingStateTransition(newState: windowTrainingState)
+                            newTip = tips[trainingState.rawValue]
                             animateTip(firstTip: false, newTip: newTip)
                         }
                     }
@@ -760,18 +761,15 @@ extension PresentationViewController {
                 recentFeedbacks.removeFirst()
             }
             
-            let newTip: String
+            var newTip: String
             let totalMatches = recentFeedbacks.filter { $0 == true }.count
             if totalMatches < 3 {
-                newTip = tips[0]
                 windowTrainingState = .tooFew
                 recentTrainingState.append(.tooFew)
             } else if totalMatches >= 3 && totalMatches <= 8 {
-                newTip = tips[1]
                 windowTrainingState = .good
                 recentTrainingState.append(.good)
             } else {
-                newTip = tips[2]
                 windowTrainingState = .tooMuch
                 recentTrainingState.append(.tooMuch)
             }
@@ -783,12 +781,14 @@ extension PresentationViewController {
             if firstReachWindow == false {
                 firstReachWindow = true
                 trainingState = windowTrainingState
+                newTip = tips[trainingState.rawValue]
                 animateTip(firstTip: true, newTip: newTip)
             } else {
                 if recentTrainingState.count >= 2 {
                     let mostRecentTrainingState = recentTrainingState.suffix(2)
                     if windowTrainingState != trainingState && (mostRecentTrainingState.filter { $0 == windowTrainingState }.count == 2) {
                         trainingStateTransition(newState: windowTrainingState)
+                        newTip = tips[trainingState.rawValue]
                         animateTip(firstTip: false, newTip: newTip)
                     }
                 }

@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>We need to recognize your speech to analyze your presentation.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -32,6 +30,8 @@
 	<string>We need to access your photo library to save your presentation videos.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>We need to access your photo library to save your presentation videos.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>We need to recognize your speech to analyze your presentation.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>DSEG7Modern-Regular.ttf</string>
